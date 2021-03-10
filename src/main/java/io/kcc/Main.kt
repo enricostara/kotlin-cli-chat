@@ -4,21 +4,23 @@ import java.lang.invoke.MethodHandles
 import java.util.*
 
 /**
- * In Kotlin functions can be declared at the top level of a file, a class is not needed.
  * The entry point of a Kotlin application is the main function.
+ * Functions can be declared at the top level of a file, a class is not needed.
  *
- * String[] in Kotlin is represented by Array<String>
+ * String[] are represented by Array<String>
  */
 fun main(args: Array<String>) {
-    // One way used by Java to find the current class works with top-level functions
+    // One way used by Java to find the current class works with top-level functions as well
     val klass = MethodHandles.lookup().lookupClass()
 
+    // the 'new' keyword is not needed to create an instance
     val properties = Properties()
     properties.load(klass.getResourceAsStream("/version.properties"))
 
     // String templates allow you to include variable references and expressions into strings.
     println("kotlin-cli-client v${properties.getProperty("version")}")
 
+    // Here use the old if-else instead of the new 'when'
     if (args.isNotEmpty()) {
         // use the spread operator '*' to pass arguments one by one by calling a vararg function with an array
         processProgramArgs(*args)
@@ -27,6 +29,14 @@ fun main(args: Array<String>) {
     }
 }
 
+/**
+ * A variable number of arguments "vararg" can also be used to receive a list of strings
+ */
+fun processProgramArgs(vararg args: String) {
+    for ((index, arg) in args.withIndex()) {
+        println("$index - $arg")
+    }
+}
 
 /**
  * A function body can be an expression
@@ -45,12 +55,3 @@ fun printHelpMessage() = println(
             -v --version    Show version
         """.trimIndent()
 )
-
-/**
- * A variable number of arguments "vararg" can also be used to receive a list of strings
- */
-fun processProgramArgs(vararg args: String) {
-    for ((index, arg) in args.withIndex()) {
-        println("$index - $arg")
-    }
-}
