@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
     // String templates allow you to include variable references and expressions into strings.
     println("kotlin-cli-client v${properties.getProperty("version")}")
 
-    // Here use the old if-else instead of the new 'when'
+    // Here, I prefer using the old if-else instead of the new 'when'
     if (args.isNotEmpty()) {
         // use the spread operator '*' to pass arguments one by one by calling a vararg function with an array
         processProgramArgs(*args)
