@@ -10,6 +10,7 @@ internal class MainMenuTest {
         assertEquals(MainMenu::printHelpMessage, MainMenu.translateUserInput("-h"))
         assertEquals(MainMenu::printHelpMessage, MainMenu.translateUserInput("--help"))
         assertEquals(MainMenu::printHelpMessage, MainMenu.translateUserInput())
+        assertEquals(UserMenu::printHelpMessage, MainMenu.translateUserInput("user"))
 
         assertEquals(MainMenu::printVersion, MainMenu.translateUserInput("--version"))
     }

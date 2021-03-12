@@ -7,7 +7,8 @@ object MainMenu {
 
     /**
      * A variable number of arguments 'vararg' can also be used to receive a list of strings.
-     * It returns a function corresponding to the user input.
+     * It returns '() -> Unit', a function corresponding to the user input.
+     * This 'Unit' type corresponds to the 'void' type in Java.
      */
     fun translateUserInput(vararg args: String): () -> Unit {
         if (args.isEmpty()) {
@@ -15,9 +16,10 @@ object MainMenu {
         }
         // 'when' is an expression and it is an advanced form of the Java 'switch-case' statement.
         return when (args[0]) {
+            // Use '::' to get e member reference
             "-h", "--help" -> MainMenu::printHelpMessage
             "--version" -> MainMenu::printVersion
-            "user" -> UserMenu.translateUserInput(args[1], null)
+            "user" -> UserMenu.translateUserInput(*args.drop(1).toTypedArray())
             else -> MainMenu::printHelpMessage
         }
     }
