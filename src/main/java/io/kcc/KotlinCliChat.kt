@@ -16,7 +16,7 @@ lateinit var projectVersion: String
  * String[] are represented by Array<String>
  */
 fun main(args: Array<String>) {
-    // One way used by Java to find the current class works with top-level functions as well
+    // one way used by Java to find the current class works with top-level functions as well
     val klass = MethodHandles.lookup().lookupClass()
 
     // the 'new' keyword is not needed to create an instance
@@ -24,6 +24,7 @@ fun main(args: Array<String>) {
     properties.load(klass.getResourceAsStream("/version.properties"))
     projectVersion = properties.getProperty("version")
 
+    // 'MainMenu' is the single instance of the MainMenu class declared as 'object'
     // use the spread operator '*' to pass input arguments one by one by calling a vararg function with an array
     val action = MainMenu.translateUserInput(*args)
 

@@ -7,11 +7,14 @@ object MainMenu {
 
     /**
      * A variable number of arguments "vararg" can also be used to receive a list of strings
+     *
+     * Returns a function corresponding to the user input
      */
     fun translateUserInput(vararg args: String): () -> Unit {
         if (args.isEmpty()) {
             return MainMenu::printHelpMessage
         }
+        // 'when' is an expression and it is an advanced form of the Java 'switch-case' statement
         return when (args[0]) {
             "-h", "--help" -> MainMenu::printHelpMessage
             "--version" -> MainMenu::printVersion
