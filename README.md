@@ -4,7 +4,7 @@ A personal Kotlin guide for Java developers.
 A simple chat with command-line interface only to collect what I have found effective in Kotlin language
 
 ## the reasons
-As a Java developer with several years of enterprise projects behind him, I wanted to picture my first impressions of using Kotlin. 
+As an old Java developer with several years of projects behind him, I wanted to picture my first impressions of using Kotlin. 
 
 Probably the Kotlin I wrote will look still boring to the seasoned Kotlin programmers. 
 
@@ -25,7 +25,7 @@ To be effective, I'll keep the code as simple as possible, only commenting on th
 It might be better to clone the repository or download the zip, open the project with an appropriate IDE (like IntelliJ IDEA Community), 
 and go through the code with the natural flow of execution (starting point is `io.kcc.KotlinCliChat`)
 
-Nevertheless, I have put all operational details in this readme file to get the project compiled and running.
+Nevertheless, I have put all the very basic operational details in this readme file to compile and run the project.
 
 ## the chat
 
