@@ -4,11 +4,11 @@ A personal Kotlin guide for Java developers.
 A simple chat with command-line interface only to collect what I have found effective in Kotlin language
 
 ## the reasons
-As an old Java developer with several years of projects behind him, I wanted to picture my first impressions of using Kotlin. 
+As an old Java developer with some projects behind him, I wanted to picture my first impressions of using Kotlin. 
 
 Probably the Kotlin I wrote will look still boring to the seasoned Kotlin programmers. 
 
-Still, it could represent what a seasoned Java programmer might find interesting to use Kotlin without sacrificing 
+Still, it could represent what a Java programmer might find interesting to use Kotlin without sacrificing 
 code readability when used in a medium-sized team.
 
 For this reason, I will try to use some idiomatic innovations brought by Kotlin only in the cases and ways in which 
