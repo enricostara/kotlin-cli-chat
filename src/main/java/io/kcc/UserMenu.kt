@@ -5,29 +5,38 @@ object UserMenu {
     fun translateUserInput(vararg args: String): () -> Unit {
         // Use 'when' without an argument to manage more complex cases by providing Boolean expressions.
         return when {
-            args.isEmpty() -> UserMenu::printHelpMessage
+            args.isEmpty() -> UserMenu::readUser
+            args[0] == "delete" -> UserMenu::deleteUser
             // Create a lambda that will call the member function using a stored parameter.
             args[0] == "add" && args.size > 1 -> { -> addUser(args[1]) }
-            args[0] == "delete" -> UserMenu::deleteUser
+            args[0] == "rename" && args.size > 1 -> { -> renameUser(args[1]) }
             else -> UserMenu::printHelpMessage
         }
     }
 
-    internal fun addUser(name: String?): String {
+    internal fun readUser() {
+        println("no user defined")
+    }
+
+    internal fun addUser(name: String?) {
         println("Add user: $name")
-        return "+$name"
+    }
+
+    internal fun renameUser(newName: String?) {
+        println("rename user: $newName")
     }
 
     internal fun deleteUser() {
         println("Delete user")
     }
 
-
     internal fun printHelpMessage() = println(
         """ 
         usage:
+            kcc user
             kcc user add <name>
-            kcc user remove
+            kcc user rename <name>
+            kcc user delete
             kcc user -h | --help
             
         Options:
