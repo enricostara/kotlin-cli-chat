@@ -5,7 +5,7 @@ A simple chat with command-line interface only to collect what I have found effe
 
 ## the reasons
 As an old Java developer with a few projects behind me, I wanted to take a picture of my first impressions of using Kotlin 
-and write this project as a guide/reference for myself and others developers who might find it useful.
+and write this project as a guide/reference for myself and other developers who might find it useful.
 
 Probably the Kotlin I wrote will look still boring to the seasoned Kotlin programmers. 
 
@@ -22,7 +22,7 @@ The implementation will purposely have no dependencies on third-party libraries.
 It will attempt to solve common problems (such as command-line argument mapping) using only the language's expressiveness.
 
 The code, the comments, and the tests will be the only documentation provided by this project.
-Kotlin supports very well in writing the tests because it is expressive and concise.
+I have found that Kotlin supports very well in writing tests because it is expressive and concise.
 
 To be effective, I'll keep the code as simple as possible, only commenting on the most significant parts the first time.
 It might be better to clone the repository or download the zip, open the project with an appropriate IDE 
