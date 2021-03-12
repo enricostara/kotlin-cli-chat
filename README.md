@@ -1,5 +1,5 @@
 # kotlin-cli-chat
-A Kotlin opinionated reference for Java developers. 
+A personal Kotlin guide for Java developers. 
 
 A simple chat with command-line interface only to collect what I have found effective in Kotlin language
 
@@ -9,9 +9,9 @@ As a Java developer with several years of enterprise projects behind him, I want
 Probably the Kotlin I wrote will look still boring to the seasoned Kotlin programmers. 
 
 Still, it could represent what an experienced Java programmer might find interesting to use Kotlin without sacrificing 
-code readability when used in big teams.
+code readability when used in a medium-sized team.
 
-For this reason, I will try to use some semantic innovations brought by Kotlin in the cases and ways in which 
+For this reason, I will try to use some idiomatic innovations brought by Kotlin in the cases and ways in which 
 I truly believe they deserve to be exploited.
 
 ## the project
@@ -31,7 +31,7 @@ This chat uses a simple command-line interface to perform all required actions, 
 joining a topic already there, etc. 
 
 The default implementation uses a filesystem-based communication protocol; 
-therefore, a network file system could be used in a real-world scenario. 
+therefore, a network file system could be used in an almost real scenario. 
 
-It could also be that you decide as an exercise to fork this project to provide a more suitable server-based protocol. 
+It could also be that you decide, as an exercise, to fork this project to provide a more suitable server-based protocol. 
 It might be easy as I will keep the protocol implementation behind the interfaces and completely detachable from the application.
