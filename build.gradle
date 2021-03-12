@@ -19,7 +19,7 @@ test {
 
 jar {
     manifest {
-        attributes "Main-Class": "io.kcc.MainKt"
+        attributes "Main-Class": "io.kcc.KotlinCliChatKt"
     }
     from {
         configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
