@@ -2,10 +2,19 @@ package io.kcc
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import java.io.File
+import java.util.*
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class ConfigurationTest {
+
+    @BeforeAll
+    fun init() {
+        projectVersion = "0-test"
+    }
 
     @AfterEach
     fun clean() {
@@ -53,5 +62,56 @@ internal class ConfigurationTest {
         val configMap = mapOf(userTopics to "kotlin, java")
         val configuration = Configuration()
         assertThrows(IllegalStateException::class.java) { configuration.readUser(configMap) }
+    }
+
+    @Test
+    fun createUser() {
+        val config = Configuration().createUser("enrico")
+        assertEquals("enrico", config.configView[userName])
+    }
+
+    @Test
+    fun updateUser() {
+        val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
+        Configuration().updateUser(User("enrico.s", listOf(Topic("kotlin-cli-chat"))), configMap)
+        assertEquals("enrico.s", configMap[userName])
+        assertEquals("kotlin-cli-chat", configMap[userTopics])
+    }
+
+    @Test
+    fun updateUserWithException() {
+        val configuration = Configuration()
+        assertThrows(IllegalStateException::class.java) {
+            configuration.updateUser(
+                User(
+                    "enrico",
+                    listOf(Topic("kotlin"), Topic("java"))
+                )
+            )
+        }
+    }
+
+    @Test
+    fun deleteUser() {
+        val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
+        Configuration().deleteUser(configMap)
+        assert(configMap.isEmpty())
+    }
+
+    @Test
+    fun deleteUserWithException() {
+        val configuration = Configuration()
+        assertThrows(IllegalStateException::class.java) {
+            configuration.deleteUser()
+        }
+    }
+
+    @Test
+    fun store() {
+        val configMap = mapOf(userName to "enrico", userTopics to "kotlin, java")
+        Configuration("./").store(configMap)
+        val properties = Properties()
+        properties.load(File(fileName).inputStream())
+        assertEquals(configMap, properties)
     }
 }

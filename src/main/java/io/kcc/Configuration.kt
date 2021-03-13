@@ -57,4 +57,31 @@ class Configuration(val path: String = System.getProperty(userHome)) {
         }
         return User(username, topics)
     }
+
+    fun createUser(name: String, config: HashMap<String, String> = configMap): Configuration {
+        config[userName] = name
+        return this
+    }
+
+    fun updateUser(user: User, config: HashMap<String, String> = configMap): Configuration {
+        checkNotNull(config[userName]) { "username not found" }
+        config[userName] = user.name
+        // 'joinToString' creates a string from all the elements separated using separator (',' as default)
+        // and optionally accepts a lambda to map each element
+        config[userTopics] = user.topics.joinToString { it.name }
+        return this
+    }
+
+    fun deleteUser(config: HashMap<String, String> = configMap): Configuration {
+        checkNotNull(config[userName]) { "username not found" }
+        config.remove(userName)
+        config.remove(userTopics)
+        return this
+    }
+
+    fun store(config: Map<String, String> = configMap): Configuration {
+        val configFile = File("$path${File.separator}$fileName")
+        config.toProperties().store(configFile.outputStream(), "kotlin-cli-chat v$projectVersion")
+        return this
+    }
 }
