@@ -2,10 +2,19 @@ package io.kcc
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import java.io.File
+import java.util.*
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class ConfigurationTest {
+
+    @BeforeAll
+    fun init() {
+        projectVersion = "0-test"
+    }
 
     @AfterEach
     fun clean() {
@@ -27,15 +36,15 @@ internal class ConfigurationTest {
 
     @Test
     fun loadEmpty() {
-        val config = Configuration().load()
-        assert(config.isEmpty())
+        val config = Configuration("./").load()
+        assert(config.configView.isEmpty())
     }
 
     @Test
     fun load() {
         val properties = mapOf(userName to "enrico").toProperties()
         properties.store(File(fileName).bufferedWriter(), "test")
-        val config = Configuration("./").load()
+        val config = Configuration("./").load().configView
         assertEquals(properties, config)
     }
 
@@ -44,7 +53,7 @@ internal class ConfigurationTest {
         val configMap = mapOf(userName to "enrico", userTopics to "kotlin, java")
         val configuration = Configuration()
         val user = configuration.readUser(configMap)
-        assertEquals("enrico", user.name)
+        assertEquals("enrico", user.name.value)
         assertArrayEquals(arrayOf(Topic("kotlin"), Topic("java")), user.topics.toTypedArray())
     }
 
@@ -53,5 +62,86 @@ internal class ConfigurationTest {
         val configMap = mapOf(userTopics to "kotlin, java")
         val configuration = Configuration()
         assertThrows(IllegalStateException::class.java) { configuration.readUser(configMap) }
+    }
+
+    @Test
+    fun createUser() {
+        val config = Configuration().createUser("enrico")
+        assertEquals("enrico", config.configView[userName])
+    }
+
+    @Test
+    fun createUserWithException() {
+        val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
+        val configuration = Configuration()
+        assertThrows(IllegalStateException::class.java) {
+            configuration.createUser("enrico", configMap)
+        }
+    }
+
+    @Test
+    fun createUserWithValidationException() {
+        assertThrows(IllegalArgumentException::class.java) {
+            Configuration().createUser("#enrico")
+        }
+    }
+
+    @Test
+    fun updateUser() {
+        val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
+        Configuration().updateUser(User(User.Name("enrico_s"), listOf(Topic("kotlin-cli-chat"))), configMap)
+        assertEquals("enrico_s", configMap[userName])
+        assertEquals("kotlin-cli-chat", configMap[userTopics])
+    }
+
+    @Test
+    fun updateUserWithException() {
+        val configuration = Configuration()
+        assertThrows(IllegalStateException::class.java) {
+            configuration.updateUser(
+                User(
+                    User.Name("enrico"),
+                    listOf(Topic("kotlin"), Topic("java"))
+                )
+            )
+        }
+    }
+
+    @Test
+    fun updateUserWithValidationException() {
+        val configuration = Configuration()
+        assertThrows(IllegalArgumentException::class.java) {
+            configuration.updateUser(
+                User(
+                    User.Name("#enrico"),
+                    listOf(Topic("kotlin"), Topic("java"))
+                )
+            )
+        }
+    }
+
+
+    @Test
+    fun deleteUser() {
+        val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
+        Configuration().deleteUser(configMap)
+        assert(configMap.isEmpty())
+    }
+
+    @Test
+    fun deleteUserWithException() {
+        val configuration = Configuration()
+        assertThrows(IllegalStateException::class.java) {
+            configuration.deleteUser()
+        }
+    }
+
+    @Test
+    fun store() {
+        val configMap = mapOf(userName to "enrico", userTopics to "kotlin, java")
+        Configuration("./").store(configMap)
+        val properties = Properties()
+        properties.load(File(fileName).inputStream())
+        assertEquals(configMap, properties)
     }
 }
