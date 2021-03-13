@@ -15,7 +15,18 @@ object UserMenu {
     }
 
     internal fun readUser() {
-        println("no user defined")
+        try {
+            val user = Configuration().load().readUser()
+            println(
+                """
+                |User name: ${user.name}                
+                |User topics: ${user.topics.joinToString("\n|  - ", "\n|  - ", "") { it.name }}
+            """.trimMargin()
+            )
+        } catch (e: IllegalStateException) {
+            println("User not yet defined.\n")
+            printHelpMessage()
+        }
     }
 
     internal fun addUser(name: String?) {

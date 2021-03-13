@@ -28,14 +28,14 @@ internal class ConfigurationTest {
     @Test
     fun loadEmpty() {
         val config = Configuration().load()
-        assert(config.isEmpty())
+        assert(config.configView.isEmpty())
     }
 
     @Test
     fun load() {
         val properties = mapOf(userName to "enrico").toProperties()
         properties.store(File(fileName).bufferedWriter(), "test")
-        val config = Configuration("./").load()
+        val config = Configuration("./").load().configView
         assertEquals(properties, config)
     }
 

@@ -14,7 +14,12 @@ internal class UserMenuTest {
         assertEquals(UserMenu::printHelpMessage, UserMenu.translateUserInput("rename"))
         assertEquals(UserMenu::deleteUser, UserMenu.translateUserInput("delete"))
         assert(
-            !setOf<Function<Unit>>(UserMenu::printHelpMessage, UserMenu::readUser, UserMenu::deleteUser, UserMenu::renameUser).contains(
+            !setOf<Function<Unit>>(
+                UserMenu::printHelpMessage,
+                UserMenu::readUser,
+                UserMenu::deleteUser,
+                UserMenu::renameUser
+            ).contains(
                 UserMenu.translateUserInput(
                     "add",
                     "enrico"
@@ -22,7 +27,12 @@ internal class UserMenuTest {
             )
         )
         assert(
-            !setOf<Function<Unit>>(UserMenu::printHelpMessage, UserMenu::readUser, UserMenu::deleteUser, UserMenu::addUser).contains(
+            !setOf<Function<Unit>>(
+                UserMenu::printHelpMessage,
+                UserMenu::readUser,
+                UserMenu::deleteUser,
+                UserMenu::addUser
+            ).contains(
                 UserMenu.translateUserInput(
                     "rename",
                     "enrico"

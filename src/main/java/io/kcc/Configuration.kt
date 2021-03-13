@@ -22,10 +22,13 @@ class Configuration(val path: String = System.getProperty(userHome)) {
 
     /**
      * 'hashMapOf()' without arguments returns an empty HashMap.
+     * 'configMap' is the backing property for the 'configView' immutable map
      */
     private val configMap = hashMapOf<String, String>()
+    val configView: Map<String, String>
+        get() = configMap.toMap()
 
-    fun load(): Map<String, String> {
+    fun load(): Configuration {
         val configFile = File("$path${File.separator}$fileName")
         if (configFile.exists()) {
             val config = Properties()
@@ -34,13 +37,12 @@ class Configuration(val path: String = System.getProperty(userHome)) {
             // 'map.put()' has been converted in an assignment.
             config.forEach { key, value -> configMap[key.toString()] = value.toString() }
         }
-        return configMap
+        return this
     }
 
     /**
-     * The 'configMap' property as the default value for the 'config' parameter in the function declaration
-     * provides the method's standard use: '.readUser()'.
-     * It supports unit tests in isolation by receiving an appropriate test configuration map.
+     * the 'config' parameter in the function declaration has the 'configMap' property as a default value to provide
+     * the standard use of the method with no arguments and to support unit tests in isolation by receiving a test configuration map.
      */
     fun readUser(config: Map<String, String> = configMap): User {
         // 'checkNotNull' throws an IllegalStateException if the value is null. Otherwise returns the not null value.

@@ -19,7 +19,8 @@ object MainMenu {
             // Use '::' to get e member reference
             "-h", "--help" -> MainMenu::printHelpMessage
             "--version" -> MainMenu::printVersion
-            "user" -> UserMenu.translateUserInput(*args.drop(1).toTypedArray())
+            // with 'drop(1)' it will pass all arguments except the first (already used)
+            "user" -> UserMenu.translateUserInput(*(args.drop(1).toTypedArray()))
             else -> MainMenu::printHelpMessage
         }
     }
