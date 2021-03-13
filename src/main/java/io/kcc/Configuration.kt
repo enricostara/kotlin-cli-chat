@@ -12,7 +12,7 @@ const val fileName = ".kcc"
 const val userHome = "user.home"
 const val userName = "user.name"
 const val userTopics = "user.topics"
-const val userNotFound = "User not yet defined."
+const val userNotFound = "No users have been created yet!"
 const val userAlreadyExists = "Another user already exists!"
 
 /**
@@ -62,7 +62,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
 
     fun createUser(name: String, config: HashMap<String, String> = configMap): Configuration {
         check(config.isEmpty()) { userAlreadyExists }
-        config[userName] = name
+        config[userName] = User.Name(name).value
         config[userTopics] = ""
         return this
     }

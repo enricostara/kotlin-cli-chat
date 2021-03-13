@@ -53,7 +53,7 @@ internal class ConfigurationTest {
         val configMap = mapOf(userName to "enrico", userTopics to "kotlin, java")
         val configuration = Configuration()
         val user = configuration.readUser(configMap)
-        assertEquals(User.Name("enrico"), user.name)
+        assertEquals("enrico", user.name.value)
         assertArrayEquals(arrayOf(Topic("kotlin"), Topic("java")), user.topics.toTypedArray())
     }
 
@@ -80,10 +80,17 @@ internal class ConfigurationTest {
     }
 
     @Test
+    fun createUserWithValidationException() {
+        assertThrows(IllegalArgumentException::class.java) {
+            Configuration().createUser("#enrico")
+        }
+    }
+
+    @Test
     fun updateUser() {
         val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
-        Configuration().updateUser(User(User.Name("enrico.s"), listOf(Topic("kotlin-cli-chat"))), configMap)
-        assertEquals("enrico.s", configMap[userName])
+        Configuration().updateUser(User(User.Name("enrico_s"), listOf(Topic("kotlin-cli-chat"))), configMap)
+        assertEquals("enrico_s", configMap[userName])
         assertEquals("kotlin-cli-chat", configMap[userTopics])
     }
 
@@ -99,6 +106,20 @@ internal class ConfigurationTest {
             )
         }
     }
+
+    @Test
+    fun updateUserWithValidationException() {
+        val configuration = Configuration()
+        assertThrows(IllegalArgumentException::class.java) {
+            configuration.updateUser(
+                User(
+                    User.Name("#enrico"),
+                    listOf(Topic("kotlin"), Topic("java"))
+                )
+            )
+        }
+    }
+
 
     @Test
     fun deleteUser() {

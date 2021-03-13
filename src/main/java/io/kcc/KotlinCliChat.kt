@@ -18,6 +18,7 @@ lateinit var projectVersion: String
  * String[] are represented by Array<String>
  */
 fun main(args: Array<String>) {
+
     // 'val' is a immutable variable and can NOT be assigned multiple times and can be initialized only single time.
     // One way used by Java to find the current class works inside top-level functions as well.
     // The type of variable, if omitted, can be inferred by the compiler.
