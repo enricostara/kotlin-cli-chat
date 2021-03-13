@@ -21,6 +21,7 @@ object MainMenu {
             "--version" -> MainMenu::printVersion
             // with 'drop(1)' it will pass all arguments except the first (already used)
             "user" -> UserMenu.translateUserInput(*(args.drop(1).toTypedArray()))
+            "host" -> HostMenu.translateUserInput(*(args.drop(1).toTypedArray()))
             else -> MainMenu::printHelpMessage
         }
     }
@@ -35,6 +36,7 @@ object MainMenu {
         """ 
         usage:
             kcc user
+            kcc host
             kcc -h | --help
             kcc --version
             

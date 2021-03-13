@@ -12,5 +12,6 @@ internal class MainMenuTest {
         assertEquals(MainMenu::printHelpMessage, MainMenu.translateUserInput("--help"))
         assertEquals(MainMenu::printVersion, MainMenu.translateUserInput("--version"))
         assertEquals(UserMenu::readUser, MainMenu.translateUserInput("user"))
+        assertEquals(HostMenu::readHost, MainMenu.translateUserInput("host"))
     }
 }

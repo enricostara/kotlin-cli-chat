@@ -1,6 +1,7 @@
 package io.kcc
 
 import java.io.File
+import java.net.URL
 import java.util.*
 
 /**
@@ -9,11 +10,15 @@ import java.util.*
  *  This inlining is much more efficient than getting a static value from a class.
  */
 const val fileName = ".kcc"
+
 const val userHome = "user.home"
 const val userName = "user.name"
 const val userTopics = "user.topics"
 const val userNotFound = "No users have been created yet!"
 const val userAlreadyExists = "Another user already exists!"
+
+const val hostUrl = "host.url"
+const val hostNotRegistered = "No hosts have been registered yet!"
 
 /**
  * 'path' is a read-only property of the configuration class.
@@ -87,5 +92,11 @@ class Configuration(val path: String = System.getProperty(userHome)) {
         val configFile = File("$path${File.separator}$fileName")
         config.toProperties().store(configFile.outputStream(), "kotlin-cli-chat v$projectVersion")
         return this
+    }
+
+
+    fun readHost(config: Map<String, String> = configMap): Host {
+        val hostUrl = checkNotNull(config[hostUrl]) { hostNotRegistered }
+        return Host(URL(hostUrl))
     }
 }
