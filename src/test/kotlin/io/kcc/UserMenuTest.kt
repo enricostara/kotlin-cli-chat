@@ -10,7 +10,7 @@ internal class UserMenuTest {
         assertEquals(UserMenu::readUser, UserMenu.translateUserInput())
         assertEquals(UserMenu::printHelpMessage, UserMenu.translateUserInput("-h"))
         assertEquals(UserMenu::printHelpMessage, UserMenu.translateUserInput("--help"))
-        assertEquals(UserMenu::printHelpMessage, UserMenu.translateUserInput("add"))
+        assertEquals(UserMenu::printHelpMessage, UserMenu.translateUserInput("create"))
         assertEquals(UserMenu::printHelpMessage, UserMenu.translateUserInput("rename"))
         assertEquals(UserMenu::deleteUser, UserMenu.translateUserInput("delete"))
         assert(
@@ -21,7 +21,7 @@ internal class UserMenuTest {
                 UserMenu::renameUser
             ).contains(
                 UserMenu.translateUserInput(
-                    "add",
+                    "create",
                     "enrico"
                 )
             )
@@ -31,7 +31,7 @@ internal class UserMenuTest {
                 UserMenu::printHelpMessage,
                 UserMenu::readUser,
                 UserMenu::deleteUser,
-                UserMenu::addUser
+                UserMenu::createUser
             ).contains(
                 UserMenu.translateUserInput(
                     "rename",
