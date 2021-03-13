@@ -12,6 +12,8 @@ const val fileName = ".kcc"
 const val userHome = "user.home"
 const val userName = "user.name"
 const val userTopics = "user.topics"
+const val userNotFound = "User not yet defined."
+const val userAlreadyExists = "Another user already exists!"
 
 /**
  * 'path' is a read-only property of the configuration class.
@@ -46,26 +48,28 @@ class Configuration(val path: String = System.getProperty(userHome)) {
      */
     fun readUser(config: Map<String, String> = configMap): User {
         // 'checkNotNull' throws an IllegalStateException if the value is null. Otherwise returns the not null value.
-        val username = checkNotNull(config[userName]) { "username not found" }
+        val username = checkNotNull(config[userName]) { userNotFound }
         // Here make the type explicit for readability.
         val topics: List<Topic> = when (val topicsProp = config[userTopics]) {
             // 'listOf()' without arguments returns an empty list.
-            null -> listOf()
+            null, "" -> listOf()
             // '.map' accepts a lambda as an action.
             // 'it' refers to the collection item.
             else -> topicsProp.split(',').map { Topic(it.trim()) }
         }
-        return User(username, topics)
+        return User(User.Name(username), topics)
     }
 
     fun createUser(name: String, config: HashMap<String, String> = configMap): Configuration {
+        check(config.isEmpty()) { userAlreadyExists }
         config[userName] = name
+        config[userTopics] = ""
         return this
     }
 
     fun updateUser(user: User, config: HashMap<String, String> = configMap): Configuration {
-        checkNotNull(config[userName]) { "username not found" }
-        config[userName] = user.name
+        checkNotNull(config[userName]) { userNotFound }
+        config[userName] = user.name.value
         // 'joinToString' creates a string from all the elements separated using separator (',' as default)
         // and optionally accepts a lambda to map each element
         config[userTopics] = user.topics.joinToString { it.name }
@@ -73,7 +77,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     }
 
     fun deleteUser(config: HashMap<String, String> = configMap): Configuration {
-        checkNotNull(config[userName]) { "username not found" }
+        checkNotNull(config[userName]) { userNotFound }
         config.remove(userName)
         config.remove(userTopics)
         return this

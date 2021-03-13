@@ -17,28 +17,47 @@ object UserMenu {
     internal fun readUser() {
         try {
             val user = Configuration().load().readUser()
-            println(
-                """
-                |User name: ${user.name}                
-                |User topics: ${user.topics.joinToString("\n|  - ", "\n|  - ", "") { it.name }}
-            """.trimMargin()
-            )
+            println(user)
         } catch (e: IllegalStateException) {
-            println("User not yet defined.\n")
+            println("${e.message}\n")
             printHelpMessage()
         }
     }
 
-    internal fun addUser(name: String?) {
-        println("Add user: $name")
+    internal fun addUser(name: String) {
+        try {
+            val user = Configuration().load().createUser(name).store().readUser()
+            println("The user ${user.name} has been created.")
+        } catch (e: IllegalStateException) {
+            println("${e.message}\n")
+            printHelpMessage()
+        }
     }
 
-    internal fun renameUser(newName: String?) {
-        println("rename user: $newName")
+    internal fun renameUser(newName: String) {
+        try {
+            val configuration = Configuration().load()
+            val user = configuration.readUser()
+            val oldName = user.name.toString()
+            user.name.value = newName
+            configuration.updateUser(user).store().readUser()
+            println("The user $oldName is now known as ${user.name}")
+        } catch (e: IllegalStateException) {
+            println("${e.message}\n")
+            printHelpMessage()
+        }
     }
 
     internal fun deleteUser() {
-        println("Delete user")
+        try {
+            val configuration = Configuration().load()
+            val user = configuration.readUser()
+            configuration.deleteUser().store()
+            println("The user ${user.name} has been deleted.")
+        } catch (e: IllegalStateException) {
+            println("${e.message}\n")
+            printHelpMessage()
+        }
     }
 
     internal fun printHelpMessage() = println(

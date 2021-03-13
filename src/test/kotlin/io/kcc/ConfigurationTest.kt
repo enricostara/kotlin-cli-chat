@@ -36,7 +36,7 @@ internal class ConfigurationTest {
 
     @Test
     fun loadEmpty() {
-        val config = Configuration().load()
+        val config = Configuration("./").load()
         assert(config.configView.isEmpty())
     }
 
@@ -53,7 +53,7 @@ internal class ConfigurationTest {
         val configMap = mapOf(userName to "enrico", userTopics to "kotlin, java")
         val configuration = Configuration()
         val user = configuration.readUser(configMap)
-        assertEquals("enrico", user.name)
+        assertEquals(User.Name("enrico"), user.name)
         assertArrayEquals(arrayOf(Topic("kotlin"), Topic("java")), user.topics.toTypedArray())
     }
 
@@ -71,9 +71,18 @@ internal class ConfigurationTest {
     }
 
     @Test
+    fun createUserWithException() {
+        val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
+        val configuration = Configuration()
+        assertThrows(IllegalStateException::class.java) {
+            configuration.createUser("enrico", configMap)
+        }
+    }
+
+    @Test
     fun updateUser() {
         val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
-        Configuration().updateUser(User("enrico.s", listOf(Topic("kotlin-cli-chat"))), configMap)
+        Configuration().updateUser(User(User.Name("enrico.s"), listOf(Topic("kotlin-cli-chat"))), configMap)
         assertEquals("enrico.s", configMap[userName])
         assertEquals("kotlin-cli-chat", configMap[userTopics])
     }
@@ -84,7 +93,7 @@ internal class ConfigurationTest {
         assertThrows(IllegalStateException::class.java) {
             configuration.updateUser(
                 User(
-                    "enrico",
+                    User.Name("enrico"),
                     listOf(Topic("kotlin"), Topic("java"))
                 )
             )
