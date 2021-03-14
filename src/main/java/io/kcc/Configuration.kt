@@ -1,5 +1,8 @@
 package io.kcc
 
+import io.kcc.model.Host
+import io.kcc.model.Topic
+import io.kcc.model.User
 import java.io.File
 import java.util.*
 
@@ -9,11 +12,16 @@ import java.util.*
  *  This inlining is much more efficient than getting a static value from a class.
  */
 const val fileName = ".kcc"
+const val errorMessage = "error:\n    "
+
 const val userHome = "user.home"
 const val userName = "user.name"
 const val userTopics = "user.topics"
-const val userNotFound = "No users have been created yet!"
-const val userAlreadyExists = "Another user already exists!"
+const val userNotFound = "no users have been created yet"
+const val userAlreadyExists = "another user already exists"
+
+const val hostUrl = "host.url"
+const val hostNotRegistered = "No hosts have been registered yet!"
 
 /**
  * 'path' is a read-only property of the configuration class.
@@ -49,10 +57,13 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     fun readUser(config: Map<String, String> = configMap): User {
         // 'checkNotNull' throws an IllegalStateException if the value is null. Otherwise returns the not null value.
         val username = checkNotNull(config[userName]) { userNotFound }
-        // Here make the type explicit for readability.
-        val topics: List<Topic> = when (val topicsProp = config[userTopics]) {
+        val topicsProp = config[userTopics]
+        // 'when' is an expression and it is an advanced form of the Java 'switch-case' statement.
+        // it can be used without argument, then the case expressions should evaluate as either true or false.
+        val topics: List<Topic> = when {
+            // 'isNullOrEmpty()' is an 'extension' method that can check if a string is null or empty
             // 'listOf()' without arguments returns an empty list.
-            null, "" -> listOf()
+            topicsProp.isNullOrEmpty() -> listOf()
             // '.map' accepts a lambda as an action.
             // 'it' refers to the collection item.
             else -> topicsProp.split(',').map { Topic(it.trim()) }
@@ -61,7 +72,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     }
 
     fun createUser(name: String, config: HashMap<String, String> = configMap): Configuration {
-        check(config.isEmpty()) { userAlreadyExists }
+        check(config[userName].isNullOrEmpty()) { userAlreadyExists }
         config[userName] = User.Name(name).value
         config[userTopics] = ""
         return this
@@ -86,6 +97,23 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     fun store(config: Map<String, String> = configMap): Configuration {
         val configFile = File("$path${File.separator}$fileName")
         config.toProperties().store(configFile.outputStream(), "kotlin-cli-chat v$projectVersion")
+        return this
+    }
+
+
+    fun readHost(config: Map<String, String> = configMap): Host {
+        val hostUrl = checkNotNull(config[hostUrl]) { hostNotRegistered }
+        return Host(hostUrl)
+    }
+
+    fun registerHost(url: String, config: HashMap<String, String> = configMap): Configuration {
+        config[hostUrl] = Host(url).url.toString()
+        return this
+    }
+
+    fun unregisterHost(config: HashMap<String, String> = configMap): Configuration {
+        checkNotNull(config[hostUrl]) { hostNotRegistered }
+        config.remove(hostUrl)
         return this
     }
 }

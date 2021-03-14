@@ -1,9 +1,9 @@
-package io.kcc
+package io.kcc.model
 
 /**
  * The main purpose of 'data class' is to hold data.
  * The compiler automatically derives equals(), hashCode(), toString() members from all properties
- * declared in the primary constructor
+ * declared in the primary constructor.
  */
 data class User(
     val name: Name,
@@ -11,14 +11,15 @@ data class User(
 ) {
 
     /**
-     *  'trimMargin' trims leading whitespace characters followed by marginPrefix ('|' as default) from every line
+     *  'trimMargin' trims leading whitespace characters followed by marginPrefix ('|' as default) from every line.
      */
     override fun toString() = """
-        |User: $name                
-        |Subsc: ${
+        |user:
+        |  name: $name                
+        |  subsc: ${
         when {
-            topics.isEmpty() -> "no #topics"
-            else -> topics.joinToString("\n|  - ", "\n|  - ", "") { it.name }
+            topics.isEmpty() -> "no /topics"
+            else -> topics.joinToString("\n|    - ", "\n|    - ", "") { it.name }
         }
     }""".trimMargin()
 
@@ -37,11 +38,13 @@ data class User(
             }
 
         private fun validate(value: String) = when {
-            value.matches("^[a-zA-Z0-9_]*$".toRegex()) -> value
-            else -> throw IllegalArgumentException("User name '$value' is not valid! It can contain only letters, numbers, and '_'")
+            value.matches("^[a-zA-Z0-9_]{3,}$".toRegex()) -> value
+            else -> throw IllegalArgumentException(
+                "user name '$value' is not valid! It can only contain letters, numbers, underscores and be at least 3 characters long."
+            )
         }
 
-        override fun toString() = "@$value"
+        override fun toString() = "#$value"
 
         // Since User.Name is a standard class the equals()/hashCode() pair has been manually overridden
         override fun equals(other: Any?): Boolean {
@@ -54,4 +57,3 @@ data class User(
         override fun hashCode() = value.hashCode()
     }
 }
-

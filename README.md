@@ -1,7 +1,7 @@
 # kotlin-cli-chat
 A personal Kotlin guide for Java developers. 
 
-A simple chat with command-line interface only to collect what I have found effective in Kotlin language
+This project implements a simple command line interface chat just to collect what I found effective in the Kotlin language.
 
 ## the reasons
 As an old Java developer with a few projects behind me, I wanted to take a picture of my first impressions of using Kotlin 

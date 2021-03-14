@@ -1,5 +1,6 @@
 package io.kcc
 
+import io.kcc.menu.MainMenu
 import java.lang.invoke.MethodHandles
 import java.util.*
 

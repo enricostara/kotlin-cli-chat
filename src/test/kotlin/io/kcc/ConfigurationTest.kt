@@ -1,5 +1,7 @@
 package io.kcc
 
+import io.kcc.model.Topic
+import io.kcc.model.User
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
@@ -80,9 +82,16 @@ internal class ConfigurationTest {
     }
 
     @Test
-    fun createUserWithValidationException() {
+    fun createUserWithValidationExceptionByBadChar() {
         assertThrows(IllegalArgumentException::class.java) {
             Configuration().createUser("#enrico")
+        }
+    }
+
+    @Test
+    fun createUserWithValidationExceptionByTooShort() {
+        assertThrows(IllegalArgumentException::class.java) {
+            Configuration().createUser("en")
         }
     }
 
@@ -120,7 +129,6 @@ internal class ConfigurationTest {
         }
     }
 
-
     @Test
     fun deleteUser() {
         val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
@@ -134,6 +142,43 @@ internal class ConfigurationTest {
         assertThrows(IllegalStateException::class.java) {
             configuration.deleteUser()
         }
+    }
+
+    @Test
+    fun readHost() {
+        val configMap = mapOf(hostUrl to "file:/users/enrico/kcc-server")
+        val configuration = Configuration()
+        val host = configuration.readHost(configMap)
+        assertEquals("file", host.url.protocol)
+        assert(host.url.authority.isNullOrEmpty())
+        assertEquals("/users/enrico/kcc-server", host.url.path)
+    }
+
+    @Test
+    fun registerHost() {
+        val config = Configuration().registerHost("file:///users/enrico/kcc-server")
+        assertEquals("file:/users/enrico/kcc-server", config.configView[hostUrl])
+    }
+
+    @Test
+    fun registerHostWithoutScheme() {
+        val config = Configuration().registerHost("/users/enrico/kcc-server")
+        assertEquals("file:/users/enrico/kcc-server", config.configView[hostUrl])
+    }
+
+    @Test
+    fun registerHostWithException() {
+        val configuration = Configuration()
+        assertThrows(Exception::class.java) {
+            configuration.registerHost("unknown:/path")
+        }
+    }
+
+    @Test
+    fun unregisterHost() {
+        val configMap = hashMapOf(hostUrl to "file:/users/enrico/kcc-server")
+        Configuration().unregisterHost(configMap)
+        assert(configMap.isEmpty())
     }
 
     @Test
