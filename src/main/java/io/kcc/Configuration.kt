@@ -4,7 +4,6 @@ import io.kcc.model.Host
 import io.kcc.model.Topic
 import io.kcc.model.User
 import java.io.File
-import java.net.URL
 import java.util.*
 
 /**
@@ -104,12 +103,11 @@ class Configuration(val path: String = System.getProperty(userHome)) {
 
     fun readHost(config: Map<String, String> = configMap): Host {
         val hostUrl = checkNotNull(config[hostUrl]) { hostNotRegistered }
-        return Host(URL(hostUrl))
+        return Host(hostUrl)
     }
 
     fun registerHost(url: String, config: HashMap<String, String> = configMap): Configuration {
-
-        config[hostUrl] = URL(url).toString()
+        config[hostUrl] = Host(url).url.toString()
         return this
     }
 

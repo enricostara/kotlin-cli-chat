@@ -82,9 +82,16 @@ internal class ConfigurationTest {
     }
 
     @Test
-    fun createUserWithValidationException() {
+    fun createUserWithValidationExceptionByBadChar() {
         assertThrows(IllegalArgumentException::class.java) {
             Configuration().createUser("#enrico")
+        }
+    }
+
+    @Test
+    fun createUserWithValidationExceptionByTooShort() {
+        assertThrows(IllegalArgumentException::class.java) {
+            Configuration().createUser("en")
         }
     }
 
@@ -151,6 +158,20 @@ internal class ConfigurationTest {
     fun registerHost() {
         val config = Configuration().registerHost("file:///users/enrico/kcc-server")
         assertEquals("file:/users/enrico/kcc-server", config.configView[hostUrl])
+    }
+
+    @Test
+    fun registerHostWithoutScheme() {
+        val config = Configuration().registerHost("/users/enrico/kcc-server")
+        assertEquals("file:/users/enrico/kcc-server", config.configView[hostUrl])
+    }
+
+    @Test
+    fun registerHostWithException() {
+        val configuration = Configuration()
+        assertThrows(Exception::class.java) {
+            configuration.registerHost("unknown:/path")
+        }
     }
 
     @Test
