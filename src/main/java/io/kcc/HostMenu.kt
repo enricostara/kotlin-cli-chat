@@ -1,5 +1,8 @@
 package io.kcc
 
+/**
+ * See the comments in the MainMenu class
+ */
 object HostMenu {
 
     fun translateUserInput(vararg args: String): () -> Unit {
@@ -21,23 +24,37 @@ object HostMenu {
         }
     }
 
-    internal fun registerHost(hostAddress: String) {
-        println("register host $hostAddress")
+    internal fun registerHost(hostUrl: String) {
+        try {
+            val host = Configuration().load().registerHost(hostUrl).store().readHost()
+            println("The host ${host.url} has been registered.")
+        } catch (e: Exception) {
+            println("${e.message}\n")
+            UserMenu.printHelpMessage()
+        }
     }
 
     internal fun unregisterHost() {
-        println("unregister host")
+        try {
+            val configuration = Configuration().load()
+            val host = configuration.readHost()
+            configuration.unregisterHost().store()
+            println("The host ${host.url} has been unregistered.")
+        } catch (e: Exception) {
+            println("${e.message}\n")
+            UserMenu.printHelpMessage()
+        }
     }
 
     internal fun printHelpMessage() = println(
         """ 
         usage:
             kcc host
-            kcc host register <name>
+            kcc host register <url>
             kcc host unregister
             kcc host -h | --help
             
-        Options:
+        options:
             -h --help   Show this screen
         """.trimIndent()
     )

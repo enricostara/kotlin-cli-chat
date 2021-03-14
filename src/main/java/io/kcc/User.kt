@@ -14,11 +14,12 @@ data class User(
      *  'trimMargin' trims leading whitespace characters followed by marginPrefix ('|' as default) from every line
      */
     override fun toString() = """
-        |User: $name                
-        |Subsc: ${
+        |user:
+        |  name: $name                
+        |  subsc: ${
         when {
-            topics.isEmpty() -> "no #topics"
-            else -> topics.joinToString("\n|  - ", "\n|  - ", "") { it.name }
+            topics.isEmpty() -> "no /topics"
+            else -> topics.joinToString("\n|    - ", "\n|    - ", "") { it.name }
         }
     }""".trimMargin()
 
@@ -41,7 +42,7 @@ data class User(
             else -> throw IllegalArgumentException("User name '$value' is not valid! It can contain only letters, numbers, and '_'")
         }
 
-        override fun toString() = "@$value"
+        override fun toString() = "#$value"
 
         // Since User.Name is a standard class the equals()/hashCode() pair has been manually overridden
         override fun equals(other: Any?): Boolean {

@@ -1,5 +1,8 @@
 package io.kcc
 
+/**
+ * See the comments in the MainMenu class
+ */
 object UserMenu {
 
     fun translateUserInput(vararg args: String): () -> Unit {
@@ -69,7 +72,7 @@ object UserMenu {
             kcc user delete
             kcc user -h | --help
             
-        Options:
+        options:
             -h --help   Show this screen
         """.trimIndent()
     )

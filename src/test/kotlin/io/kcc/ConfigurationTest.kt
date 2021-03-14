@@ -120,7 +120,6 @@ internal class ConfigurationTest {
         }
     }
 
-
     @Test
     fun deleteUser() {
         val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
@@ -134,6 +133,29 @@ internal class ConfigurationTest {
         assertThrows(IllegalStateException::class.java) {
             configuration.deleteUser()
         }
+    }
+
+    @Test
+    fun readHost() {
+        val configMap = mapOf(hostUrl to "file:/users/enrico/kcc-server")
+        val configuration = Configuration()
+        val host = configuration.readHost(configMap)
+        assertEquals("file", host.url.protocol)
+        assert(host.url.authority.isNullOrEmpty())
+        assertEquals("/users/enrico/kcc-server", host.url.path)
+    }
+
+    @Test
+    fun registerHost() {
+        val config = Configuration().registerHost("file:///users/enrico/kcc-server")
+        assertEquals("file:/users/enrico/kcc-server", config.configView[hostUrl])
+    }
+
+    @Test
+    fun unregisterHost() {
+        val configMap = hashMapOf(hostUrl to "file:/users/enrico/kcc-server")
+        Configuration().unregisterHost(configMap)
+        assert(configMap.isEmpty())
     }
 
     @Test

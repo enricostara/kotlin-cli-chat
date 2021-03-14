@@ -14,7 +14,7 @@ object MainMenu {
         if (args.isEmpty()) {
             return MainMenu::printHelpMessage
         }
-        // 'when' is an expression and it is an advanced form of the Java 'switch-case' statement.
+        // 'when' with argument is more like Java's 'switch-case' statement.
         return when (args[0]) {
             // Use '::' to get e member reference
             "-h", "--help" -> MainMenu::printHelpMessage
@@ -37,10 +37,14 @@ object MainMenu {
         usage:
             kcc user
             kcc host
+            kcc -m <message>
+            kcc -p <number_of_msg>
             kcc -h | --help
             kcc --version
             
-        Options:
+        options:
+            -m <msg>    Send a message to the topic
+            -p <n>      Print <n> number of topic's messages, 0 means all
             -h --help   Show this screen
             --version   Show version
         """.trimIndent()
