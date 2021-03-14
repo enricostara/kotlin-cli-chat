@@ -72,7 +72,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     }
 
     fun createUser(name: String, config: HashMap<String, String> = configMap): Configuration {
-        check(config.isEmpty()) { userAlreadyExists }
+        check(config[userName].isNullOrEmpty()) { userAlreadyExists }
         config[userName] = User.Name(name).value
         config[userTopics] = ""
         return this

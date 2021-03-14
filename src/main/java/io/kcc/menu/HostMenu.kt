@@ -3,6 +3,9 @@ package io.kcc.menu
 import io.kcc.Configuration
 import io.kcc.errorMessage
 
+const val registerMenuItem = "reg"
+const val unregisterMenuItem = "unreg"
+
 /**
  * See the comments in the MainMenu class
  */
@@ -11,8 +14,8 @@ object HostMenu {
     fun translateUserInput(vararg args: String): () -> Unit {
         return when {
             args.isEmpty() -> HostMenu::readHost
-            args[0] == "register" && args.size > 1 -> { -> registerHost(args[1]) }
-            args[0] == "unregister" -> HostMenu::unregisterHost
+            args[0] == registerMenuItem && args.size > 1 -> { -> registerHost(args[1]) }
+            args[0] == unregisterMenuItem -> HostMenu::unregisterHost
             else -> HostMenu::printHelpMessage
         }
     }
@@ -52,13 +55,13 @@ object HostMenu {
     internal fun printHelpMessage() = println(
         """ 
         usage:
-            kcc host
-            kcc host register <url>
-            kcc host unregister
-            kcc host -h | --help
+            kcc $hostMenuItem
+            kcc $hostMenuItem $registerMenuItem <url>
+            kcc $hostMenuItem $unregisterMenuItem
+            kcc $hostMenuItem $helpShortOption | $helpOption
             
         options:
-            -h --help   Show this screen
+            $helpShortOption $helpOption   Show this screen
         """.trimIndent()
     )
 }

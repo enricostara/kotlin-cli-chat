@@ -2,6 +2,14 @@ package io.kcc.menu
 
 import io.kcc.projectVersion
 
+const val userMenuItem = "user"
+const val hostMenuItem = "host"
+const val helpOption = "--help"
+const val helpShortOption = "-h"
+const val versionOption = "--version"
+const val messageShortOption = "-m"
+const val printShortOption = "-p"
+
 /**
  * Use 'object' to declare a singleton, a class for which you need only one instance.
  */
@@ -19,11 +27,11 @@ object MainMenu {
         // 'when' with argument is more like Java's 'switch-case' statement.
         return when (args[0]) {
             // Use '::' to get e member reference
-            "-h", "--help" -> MainMenu::printHelpMessage
-            "--version" -> MainMenu::printVersion
+            helpOption, helpShortOption -> MainMenu::printHelpMessage
+            versionOption -> MainMenu::printVersion
             // with 'drop(1)' it will pass all arguments except the first (already used)
-            "user" -> UserMenu.translateUserInput(*(args.drop(1).toTypedArray()))
-            "host" -> HostMenu.translateUserInput(*(args.drop(1).toTypedArray()))
+            userMenuItem -> UserMenu.translateUserInput(*(args.drop(1).toTypedArray()))
+            hostMenuItem -> HostMenu.translateUserInput(*(args.drop(1).toTypedArray()))
             else -> MainMenu::printHelpMessage
         }
     }
@@ -37,18 +45,18 @@ object MainMenu {
         // it fits perfectly in writing the help message.
         """ 
         usage:
-            kcc user
-            kcc host
-            kcc -m <message>
-            kcc -p <number_of_msg>
-            kcc -h | --help
-            kcc --version
+            kcc $userMenuItem
+            kcc $hostMenuItem
+            kcc $messageShortOption <msg>
+            kcc $printShortOption <number_of_msg>
+            kcc $helpShortOption | $helpOption
+            kcc $versionOption
             
         options:
-            -m <msg>    Send a message to the topic
-            -p <n>      Print <n> number of topic's messages, 0 means all
-            -h --help   Show this screen
-            --version   Show version
+            $messageShortOption <msg>    Send a message to the topic
+            $printShortOption <n>      Print <n> number of topic's messages, 0 means all
+            $helpShortOption $helpOption   Show this screen
+            $versionOption   Show version
         """.trimIndent()
     )
 
