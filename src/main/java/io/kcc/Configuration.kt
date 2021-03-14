@@ -1,5 +1,8 @@
 package io.kcc
 
+import io.kcc.model.Host
+import io.kcc.model.Topic
+import io.kcc.model.User
 import java.io.File
 import java.net.URL
 import java.util.*
@@ -115,5 +118,4 @@ class Configuration(val path: String = System.getProperty(userHome)) {
         config.remove(hostUrl)
         return this
     }
-
 }

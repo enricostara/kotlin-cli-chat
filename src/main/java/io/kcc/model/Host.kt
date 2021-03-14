@@ -1,4 +1,4 @@
-package io.kcc
+package io.kcc.model
 
 import java.net.URL
 

@@ -1,4 +1,4 @@
-package io.kcc
+package io.kcc.model
 
 /**
  * The main purpose of 'data class' is to hold data.
@@ -39,7 +39,7 @@ data class User(
 
         private fun validate(value: String) = when {
             value.matches("^[a-zA-Z0-9_]*$".toRegex()) -> value
-            else -> throw IllegalArgumentException("User name '$value' is not valid! It can contain only letters, numbers, and '_'")
+            else -> throw IllegalArgumentException("user name '$value' is not valid! It can contain only letters, numbers, and '_'")
         }
 
         override fun toString() = "#$value"

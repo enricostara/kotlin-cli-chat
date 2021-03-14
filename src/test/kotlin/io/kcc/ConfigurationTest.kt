@@ -1,5 +1,7 @@
 package io.kcc
 
+import io.kcc.model.Topic
+import io.kcc.model.User
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll

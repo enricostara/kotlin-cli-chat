@@ -1,4 +1,4 @@
-package io.kcc
+package io.kcc.model
 
 /**
  * See the comments in the User class
