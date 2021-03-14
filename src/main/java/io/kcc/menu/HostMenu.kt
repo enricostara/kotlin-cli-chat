@@ -1,6 +1,7 @@
 package io.kcc.menu
 
 import io.kcc.Configuration
+import io.kcc.errorMessage
 
 /**
  * See the comments in the MainMenu class
@@ -21,7 +22,7 @@ object HostMenu {
             val host = Configuration().load().readHost()
             println(host)
         } catch (e: IllegalStateException) {
-            println("${e.message}\n")
+            println("$errorMessage${e.message}\n")
             printHelpMessage()
         }
     }
@@ -31,7 +32,7 @@ object HostMenu {
             val host = Configuration().load().registerHost(hostUrl).store().readHost()
             println("The host ${host.url} has been registered.")
         } catch (e: Exception) {
-            println("${e.message}\n")
+            println("$errorMessage${e.message}\n")
             UserMenu.printHelpMessage()
         }
     }
@@ -43,7 +44,7 @@ object HostMenu {
             configuration.unregisterHost().store()
             println("The host ${host.url} has been unregistered.")
         } catch (e: Exception) {
-            println("${e.message}\n")
+            println("$errorMessage${e.message}\n")
             UserMenu.printHelpMessage()
         }
     }

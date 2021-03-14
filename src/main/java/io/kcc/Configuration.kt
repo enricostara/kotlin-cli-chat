@@ -57,7 +57,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
      */
     fun readUser(config: Map<String, String> = configMap): User {
         // 'checkNotNull' throws an IllegalStateException if the value is null. Otherwise returns the not null value.
-        val username = checkNotNull(config[userName]) { errorMessage + userNotFound }
+        val username = checkNotNull(config[userName]) { userNotFound }
         val topicsProp = config[userTopics]
         // 'when' is an expression and it is an advanced form of the Java 'switch-case' statement.
         // it can be used without argument, then the case expressions should evaluate as either true or false.
@@ -80,7 +80,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     }
 
     fun updateUser(user: User, config: HashMap<String, String> = configMap): Configuration {
-        checkNotNull(config[userName]) { errorMessage + userNotFound }
+        checkNotNull(config[userName]) { userNotFound }
         config[userName] = user.name.value
         // 'joinToString' creates a string from all the elements separated using separator (',' as default)
         // and optionally accepts a lambda to map each element
@@ -89,7 +89,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     }
 
     fun deleteUser(config: HashMap<String, String> = configMap): Configuration {
-        checkNotNull(config[userName]) { errorMessage + userNotFound }
+        checkNotNull(config[userName]) { userNotFound }
         config.remove(userName)
         config.remove(userTopics)
         return this
@@ -103,7 +103,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
 
 
     fun readHost(config: Map<String, String> = configMap): Host {
-        val hostUrl = checkNotNull(config[hostUrl]) { errorMessage + hostNotRegistered }
+        val hostUrl = checkNotNull(config[hostUrl]) { hostNotRegistered }
         return Host(URL(hostUrl))
     }
 

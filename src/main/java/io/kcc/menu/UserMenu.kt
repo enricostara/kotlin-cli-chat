@@ -1,6 +1,7 @@
 package io.kcc.menu
 
 import io.kcc.Configuration
+import io.kcc.errorMessage
 
 /**
  * See the comments in the MainMenu class
@@ -24,7 +25,7 @@ object UserMenu {
             val user = Configuration().load().readUser()
             println(user)
         } catch (e: IllegalStateException) {
-            println("${e.message}\n")
+            println("$errorMessage${e.message}\n")
             printHelpMessage()
         }
     }
@@ -34,7 +35,7 @@ object UserMenu {
             val user = Configuration().load().createUser(name).store().readUser()
             println("The user ${user.name} has been created.")
         } catch (e: Exception) {
-            println("${e.message}\n")
+            println("$errorMessage${e.message}\n")
             printHelpMessage()
         }
     }
@@ -48,7 +49,7 @@ object UserMenu {
             configuration.updateUser(user).store().readUser()
             println("The user $oldName is now known as ${user.name}")
         } catch (e: Exception) {
-            println("${e.message}\n")
+            println("$errorMessage${e.message}\n")
             printHelpMessage()
         }
     }
@@ -60,7 +61,7 @@ object UserMenu {
             configuration.deleteUser().store()
             println("The user ${user.name} has been deleted.")
         } catch (e: IllegalStateException) {
-            println("${e.message}\n")
+            println("$errorMessage${e.message}\n")
             printHelpMessage()
         }
     }
