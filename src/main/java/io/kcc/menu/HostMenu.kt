@@ -7,18 +7,23 @@ const val registerMenuItem = "reg"
 const val unregisterMenuItem = "unreg"
 
 /**
- * See the comments in the MainMenu class
+ * Use 'object' to declare a singleton, a class for which you need only one instance.
  */
 object HostMenu {
 
-    fun translateUserInput(vararg args: String): () -> Unit {
-        return when {
-            args.isEmpty() -> HostMenu::readHost
-            args[0] == registerMenuItem && args.size > 1 -> { -> registerHost(args[1]) }
-            args[0] == unregisterMenuItem -> HostMenu::unregisterHost
-            else -> HostMenu::printHelpMessage
-        }
+    /**
+     * A variable number of arguments 'vararg' can also be used to receive a list of strings.
+     * It returns '() -> Unit', a function corresponding to the user input.
+     * This 'Unit' type corresponds to the 'void' type in Java.
+     */
+    fun translateUserInput(vararg args: String): () -> Unit = when {
+        // Use 'when' without an argument to manage more complex cases by providing Boolean expressions.
+        args.isEmpty() -> HostMenu::readHost
+        args[0] == registerMenuItem && args.size > 1 -> { -> registerHost(args[1]) }
+        args[0] == unregisterMenuItem -> HostMenu::unregisterHost
+        else -> HostMenu::printHelpMessage
     }
+
 
     internal fun readHost() {
         try {

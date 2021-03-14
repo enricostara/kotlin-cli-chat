@@ -8,20 +8,23 @@ const val renameMenuItem = "ren"
 const val deleteMenuItem = "del"
 
 /**
- * See the comments in the MainMenu class
+ * Use 'object' to declare a singleton, a class for which you need only one instance.
  */
 object UserMenu {
 
-    fun translateUserInput(vararg args: String): () -> Unit {
+    /**
+     * A variable number of arguments 'vararg' can also be used to receive a list of strings.
+     * It returns '() -> Unit', a function corresponding to the user input.
+     * This 'Unit' type corresponds to the 'void' type in Java.
+     */
+    fun translateUserInput(vararg args: String): () -> Unit = when {
         // Use 'when' without an argument to manage more complex cases by providing Boolean expressions.
-        return when {
-            args.isEmpty() -> UserMenu::readUser
-            args[0] == deleteMenuItem -> UserMenu::deleteUser
-            // Create a lambda that will call the member function using a stored parameter.
-            args[0] == createMenuItem && args.size > 1 -> { -> createUser(args[1]) }
-            args[0] == renameMenuItem && args.size > 1 -> { -> renameUser(args[1]) }
-            else -> UserMenu::printHelpMessage
-        }
+        args.isEmpty() -> UserMenu::readUser
+        args[0] == deleteMenuItem -> UserMenu::deleteUser
+        // Create a lambda that will call the member function using a stored parameter.
+        args[0] == createMenuItem && args.size > 1 -> { -> createUser(args[1]) }
+        args[0] == renameMenuItem && args.size > 1 -> { -> renameUser(args[1]) }
+        else -> UserMenu::printHelpMessage
     }
 
     internal fun readUser() {
