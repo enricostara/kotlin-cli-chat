@@ -1,4 +1,6 @@
-package io.kcc
+package io.kcc.menu
+
+import io.kcc.projectVersion
 
 /**
  * Use 'object' to declare a singleton, a class for which you need only one instance.

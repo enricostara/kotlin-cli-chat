@@ -1,4 +1,4 @@
-package io.kcc
+package io.kcc.menu
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

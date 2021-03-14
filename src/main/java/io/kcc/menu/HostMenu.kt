@@ -1,4 +1,6 @@
-package io.kcc
+package io.kcc.menu
+
+import io.kcc.Configuration
 
 /**
  * See the comments in the MainMenu class
