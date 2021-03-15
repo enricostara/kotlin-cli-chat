@@ -167,10 +167,18 @@ internal class ConfigurationTest {
     }
 
     @Test
-    fun registerHostWithException() {
+    fun registerHostWithExceptionByBadScheme() {
         val configuration = Configuration()
         assertThrows(Exception::class.java) {
             configuration.registerHost("unknown:/path")
+        }
+    }
+
+    @Test
+    fun registerHostWithExceptionByUnsupportedScheme() {
+        val configuration = Configuration()
+        assertThrows(Exception::class.java) {
+            configuration.registerHost("ftp:/path")
         }
     }
 
