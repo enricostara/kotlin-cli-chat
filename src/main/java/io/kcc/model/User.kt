@@ -28,10 +28,10 @@ data class User(
      * They are like the static nested classes in Java.
      */
     class Name(initValue: String) {
-        // Property 'value' initialized by the 'initValue' constructor parameter after validation
+        // Property 'value' initialized by the constructor 'initValue' parameter after validation
         var value = validate(initValue)
             // In Kotlin, getters and setters are optional and are auto-generated if you do not create them in your program.
-            // In 'data' classes it is not possible to create getters and setters and that is why User.Name is a standard class
+            // In 'data class' it is not possible to create getters and setters and that is why User.Name is a standard class
             // The 'value' setter to validate any new value
             set(newValue) {
                 field = validate(newValue)
@@ -46,7 +46,7 @@ data class User(
 
         override fun toString() = "#$value"
 
-        // Since User.Name is a standard class the equals()/hashCode() pair has been manually overridden
+        // Since this is a standard class the equals()/hashCode() pair has been manually overridden
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             // 'is' is the same as 'instanceOf' in Java
