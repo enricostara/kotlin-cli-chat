@@ -3,7 +3,6 @@ package io.kcc.menu
 import io.kcc.Configuration
 import io.kcc.errorMessage
 
-const val createMenuItem = "new"
 const val renameMenuItem = "ren"
 const val deleteMenuItem = "del"
 

@@ -4,11 +4,14 @@ import io.kcc.projectVersion
 
 const val userMenuItem = "user"
 const val hostMenuItem = "host"
+const val topicMenuItem = "topic"
 const val helpOption = "--help"
 const val helpShortOption = "-h"
 const val versionOption = "--version"
 const val messageShortOption = "-m"
 const val printShortOption = "-p"
+
+const val createMenuItem = "new"
 
 /**
  * Use 'object' to declare a singleton, a class for which you need only one instance.
@@ -32,6 +35,7 @@ object MainMenu {
             // with 'drop(1)' it will pass all arguments except the first (already used)
             userMenuItem -> UserMenu.translateUserInput(*(args.drop(1).toTypedArray()))
             hostMenuItem -> HostMenu.translateUserInput(*(args.drop(1).toTypedArray()))
+            topicMenuItem -> TopicMenu.translateUserInput(*(args.drop(1).toTypedArray()))
             else -> MainMenu::printHelpMessage
         }
     }
@@ -47,6 +51,7 @@ object MainMenu {
         usage:
             kcc $userMenuItem
             kcc $hostMenuItem
+            kcc $topicMenuItem
             kcc $messageShortOption <msg>
             kcc $printShortOption <number_of_msg>
             kcc $helpShortOption | $helpOption
