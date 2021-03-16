@@ -3,6 +3,7 @@ package io.kcc
 import io.kcc.model.Host
 import io.kcc.model.Topic
 import io.kcc.model.User
+import io.kcc.protocol.provideKccProtocolHandler
 import java.io.File
 import java.util.*
 
@@ -107,7 +108,9 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     }
 
     fun registerHost(url: String, config: HashMap<String, String> = configMap): Configuration {
-        config[hostUrl] = Host(url).url.toString()
+        val host = Host(url)
+        provideKccProtocolHandler(host)
+        config[hostUrl] = host.url.toString()
         return this
     }
 
