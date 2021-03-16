@@ -32,7 +32,7 @@ data class User(
         var value = validate(initValue)
             // In Kotlin, getters and setters are optional and are auto-generated if you do not create them in your program.
             // In 'data' classes it is not possible to create getters and setters and that is why User.Name is a standard class
-            // The property 'value' setter to validate any new value
+            // The 'value' setter to validate any new value
             set(newValue) {
                 field = validate(newValue)
             }
