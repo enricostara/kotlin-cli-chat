@@ -1,5 +1,7 @@
 package io.kcc.model
 
+const val userSymbol = '#'
+
 /**
  * The main purpose of 'data class' is to hold data.
  * The compiler automatically derives equals(), hashCode(), toString() members from all properties
@@ -47,7 +49,7 @@ data class User(
             )
         }
 
-        override fun toString() = "#$value"
+        override fun toString() = "$userSymbol$value"
 
         // Since this is a standard class the equals()/hashCode() pair has been manually overridden
         override fun equals(other: Any?): Boolean {
