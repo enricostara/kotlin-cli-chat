@@ -12,6 +12,7 @@ const val messageShortOption = "-m"
 const val printShortOption = "-p"
 
 const val createMenuItem = "new"
+const val deleteMenuItem = "del"
 
 /**
  * Use 'object' to declare a singleton, a class for which you need only one instance.

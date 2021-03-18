@@ -4,7 +4,6 @@ import io.kcc.Configuration
 import io.kcc.errorMessage
 
 const val renameMenuItem = "ren"
-const val deleteMenuItem = "del"
 
 /**
  * Use 'object' to declare a singleton, a class for which you need only one instance.

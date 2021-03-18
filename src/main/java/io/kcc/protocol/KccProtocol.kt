@@ -16,7 +16,7 @@ interface KccProtocol {
     fun accept(requiredHost: Host): Boolean
 
     fun readTopics(): Set<Topic>
-    fun createTopic(topic: Topic, user: User)
+    fun createTopic(topic: Topic)
     fun joinTopic(topic: Topic, user: User)
     fun leaveTopic(topic: Topic, user: User)
     fun deleteTopic(topic: Topic, user: User)

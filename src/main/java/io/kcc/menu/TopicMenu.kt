@@ -26,6 +26,7 @@ object TopicMenu {
         args[0] == createMenuItem && args.size > 1 -> { -> createTopic(args[1]) }
         args[0] == joinMenuItem && args.size > 1 -> { -> joinTopic(args[1]) }
         args[0] == leaveMenuItem && args.size > 1 -> { -> leaveTopic(args[1]) }
+        args[0] == deleteMenuItem && args.size > 1 -> { -> deleteTopic(args[1]) }
         else -> TopicMenu::printHelpMessage
     }
 
@@ -69,6 +70,16 @@ object TopicMenu {
         }
     }
 
+    internal fun deleteTopic(name: String) {
+        try {
+            println("Delete topic $name")
+//            val user = Configuration().load().createUser(name).store().readUser()
+//            println("The user ${user.name} has been created.")
+        } catch (e: Exception) {
+            println("$errorMessage${e.message}\n")
+            printHelpMessage()
+        }
+    }
 
     internal fun printHelpMessage() = println(
         """ 

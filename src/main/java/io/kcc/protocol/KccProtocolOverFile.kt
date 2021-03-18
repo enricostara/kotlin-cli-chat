@@ -1,9 +1,6 @@
 package io.kcc.protocol
 
-import io.kcc.model.Host
-import io.kcc.model.Message
-import io.kcc.model.Topic
-import io.kcc.model.User
+import io.kcc.model.*
 import java.io.File
 
 object KccProtocolOverFile : KccProtocol {
@@ -25,18 +22,19 @@ object KccProtocolOverFile : KccProtocol {
     override fun readTopics(): Set<Topic> =
         File(host.url.path).walk()
             .filter { it.extension == "kcc" }
-            .map { Topic(it.name.substringAfter('.').substringBeforeLast('.')) }
+            .map { Topic(it.name.substringAfter('.').substringBefore(userSymbol)) }
             .toSet()
 
 
     /**
-     * On creating a new topic, the 'user' argument won't be used by this protocol implementation, but others should use it
+     * The topic.owner could be null, then the safe call operator ?. has been used to get the owner's name
+     * [see](https://kotlinlang.org/docs/null-safety.html#safe-calls)
      */
-    override fun createTopic(topic: Topic, user: User) {
-        val file = File("${host.url.path}${File.separator}.${topic.name}.kcc")
+    override fun createTopic(topic: Topic) {
+        val topics = readTopics()
         // use 'error' that throws an IllegalStateException with the given message
-        if (file.exists()) error("Topic $topic already exists!")
-        file.createNewFile()
+        if (topics.contains(topic)) error("Topic $topic already exists!")
+        File("${host.url.path}${File.separator}.${topic.name}${topic.owner?.name}.kcc").createNewFile()
     }
 
     override fun joinTopic(topic: Topic, user: User) {

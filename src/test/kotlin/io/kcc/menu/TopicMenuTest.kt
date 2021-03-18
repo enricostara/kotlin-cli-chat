@@ -13,12 +13,14 @@ internal class TopicMenuTest {
         assertEquals(TopicMenu::printHelpMessage, TopicMenu.translateUserInput(createMenuItem))
         assertEquals(TopicMenu::printHelpMessage, TopicMenu.translateUserInput(joinMenuItem))
         assertEquals(TopicMenu::printHelpMessage, TopicMenu.translateUserInput(leaveMenuItem))
+        assertEquals(TopicMenu::printHelpMessage, TopicMenu.translateUserInput(deleteMenuItem))
         assert(
             !setOf<Function<Unit>>(
                 TopicMenu::printHelpMessage,
                 TopicMenu::readTopics,
                 TopicMenu::joinTopic,
-                TopicMenu::leaveTopic
+                TopicMenu::leaveTopic,
+                TopicMenu::deleteTopic
             ).contains(
                 TopicMenu.translateUserInput(
                     createMenuItem,
@@ -31,7 +33,8 @@ internal class TopicMenuTest {
                 TopicMenu::printHelpMessage,
                 TopicMenu::readTopics,
                 TopicMenu::createTopic,
-                TopicMenu::leaveTopic
+                TopicMenu::leaveTopic,
+                TopicMenu::deleteTopic
             ).contains(
                 TopicMenu.translateUserInput(
                     joinMenuItem,
@@ -44,10 +47,25 @@ internal class TopicMenuTest {
                 TopicMenu::printHelpMessage,
                 TopicMenu::readTopics,
                 TopicMenu::createTopic,
-                TopicMenu::joinTopic
+                TopicMenu::joinTopic,
+                TopicMenu::deleteTopic
             ).contains(
                 TopicMenu.translateUserInput(
                     leaveMenuItem,
+                    "pascal"
+                )
+            )
+        )
+        assert(
+            !setOf<Function<Unit>>(
+                TopicMenu::printHelpMessage,
+                TopicMenu::readTopics,
+                TopicMenu::createTopic,
+                TopicMenu::joinTopic,
+                TopicMenu::leaveTopic,
+            ).contains(
+                TopicMenu.translateUserInput(
+                    deleteMenuItem,
                     "pascal"
                 )
             )

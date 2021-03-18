@@ -1,10 +1,15 @@
 package io.kcc.model
 
+const val topicSymbol = '/'
+
 /**
  *  Use a standard class in order to validate constructor parameters
  *  [see](https://kotlinlang.org/docs/classes.html#constructors)
+ *
+ *  The User owner is a nullable property declared by using the User? type
+ *  [see](https://kotlinlang.org/docs/null-safety.html#nullable-types-and-non-null-types)
  */
-class Topic(initName: String) {
+class Topic(initName: String, val owner: User? = null) {
     // Property 'value' initialized by the constructor 'initName' parameter after validation
     val name = validate(initName)
 
@@ -15,7 +20,7 @@ class Topic(initName: String) {
         )
     }
 
-    override fun toString() = "/$name"
+    override fun toString() = "$topicSymbol$name"
 
     // Since this is a standard class the equals()/hashCode() pair has been manually overridden
     override fun equals(other: Any?): Boolean {
