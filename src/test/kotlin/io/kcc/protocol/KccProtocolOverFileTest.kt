@@ -2,9 +2,12 @@ package io.kcc.protocol
 
 import io.kcc.model.Host
 import io.kcc.model.Topic
+import io.kcc.model.User
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.lang.IllegalArgumentException
 
 internal class KccProtocolOverFileTest {
 
@@ -30,6 +33,34 @@ internal class KccProtocolOverFileTest {
 
     @Test
     fun createTopic() {
+        KccProtocolOverFile.accept(Host("file:./"))
+        KccProtocolOverFile.createTopic(Topic("kotlin-cli-chat"), User(User.Name("enrico")))
+        assert(File(".kotlin-cli-chat.kcc").exists())
+    }
+
+    @Test
+    fun createTopicWithExceptionByTopicAlreadyExists() {
+        KccProtocolOverFile.accept(Host("file:./"))
+        KccProtocolOverFile.createTopic(Topic("kotlin-cli-chat"), User(User.Name("enrico")))
+        Assertions.assertThrows(IllegalStateException::class.java) {
+            KccProtocolOverFile.createTopic(Topic("kotlin-cli-chat"), User(User.Name("enrico")))
+        }
+    }
+
+    @Test
+    fun createTopicWithExceptionByBadChar() {
+        KccProtocolOverFile.accept(Host("file:./"))
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            KccProtocolOverFile.createTopic(Topic("kotlin_cli_chat"), User(User.Name("enrico")))
+        }
+    }
+
+    @Test
+    fun createTopicWithExceptionByTooShort() {
+        KccProtocolOverFile.accept(Host("file:./"))
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            KccProtocolOverFile.createTopic(Topic("ko"), User(User.Name("enrico")))
+        }
     }
 
     @Test

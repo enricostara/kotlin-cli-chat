@@ -18,6 +18,9 @@ object KccProtocolOverFile : KccProtocol {
         else -> false
     }
 
+    /**
+     * The 'substring*' String extension function at the rescue
+     */
     override fun readTopics(): Set<Topic> =
         File(host.url.path).walk()
             .filter { it.extension == "kcc" }
@@ -25,8 +28,14 @@ object KccProtocolOverFile : KccProtocol {
             .toSet()
 
 
+    /**
+     * On creating a new topic, the 'user' argument won't be used by this protocol implementation, but others should use it
+     */
     override fun createTopic(topic: Topic, user: User) {
-        TODO("Not yet implemented")
+        val file = File("${host.url.path}${File.separator}.${topic.name}.kcc")
+        // use 'error' that throws an IllegalStateException with the given message
+        if (file.exists()) error("Topic $topic already exists!")
+        file.createNewFile()
     }
 
     override fun joinTopic(topic: Topic, user: User) {
