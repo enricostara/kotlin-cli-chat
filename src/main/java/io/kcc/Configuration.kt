@@ -62,13 +62,13 @@ class Configuration(val path: String = System.getProperty(userHome)) {
         val topicsProp = config[userTopics]
         // 'when' is an expression and it is an advanced form of the Java 'switch-case' statement.
         // it can be used without argument, then the case expressions should evaluate as either true or false.
-        val topics: List<Topic> = when {
+        val topics: MutableList<Topic> = when {
             // 'isNullOrEmpty()' is an 'extension' method that can check if a string is null or empty
             // 'listOf()' without arguments returns an empty list.
-            topicsProp.isNullOrEmpty() -> listOf()
+            topicsProp.isNullOrEmpty() -> arrayListOf()
             // '.map' accepts a lambda as an action.
             // 'it' refers to the collection item.
-            else -> topicsProp.split(',').map { Topic(it.trim()) }
+            else -> topicsProp.split(',').map { Topic(it.trim()) }.toMutableList()
         }
         return User(User.Name(username), topics)
     }

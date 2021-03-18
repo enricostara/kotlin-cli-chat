@@ -10,8 +10,18 @@ const val userSymbol = '#'
  */
 data class User(
     val name: Name,
-    val topics: List<Topic> = listOf()
+    val topics: MutableList<Topic> = arrayListOf()
 ) {
+
+    fun joinTopic(topic: Topic) {
+        if (topics.contains(topic)) error("topic $topic already joined!")
+        topics.add(topic)
+    }
+
+    fun leaveTopic(topic: Topic) {
+        if (!topics.contains(topic)) error("cannot leave the topic $topic, it has not been joined!")
+        topics.remove(topic)
+    }
 
     /**
      * The 'trimMargin' trims leading whitespace characters followed by marginPrefix ('|' as default) from every line.

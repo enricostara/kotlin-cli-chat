@@ -98,7 +98,7 @@ internal class ConfigurationTest {
     @Test
     fun updateUser() {
         val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
-        Configuration().updateUser(User(User.Name("enrico_s"), listOf(Topic("kotlin-cli-chat"))), configMap)
+        Configuration().updateUser(User(User.Name("enrico_s"), arrayListOf(Topic("kotlin-cli-chat"))), configMap)
         assertEquals("enrico_s", configMap[userName])
         assertEquals("kotlin-cli-chat", configMap[userTopics])
     }
@@ -110,7 +110,7 @@ internal class ConfigurationTest {
             configuration.updateUser(
                 User(
                     User.Name("enrico"),
-                    listOf(Topic("kotlin"), Topic("java"))
+                    arrayListOf(Topic("kotlin"), Topic("java"))
                 )
             )
         }
@@ -123,7 +123,7 @@ internal class ConfigurationTest {
             configuration.updateUser(
                 User(
                     User.Name("#enrico"),
-                    listOf(Topic("kotlin"), Topic("java"))
+                    arrayListOf(Topic("kotlin"), Topic("java"))
                 )
             )
         }
