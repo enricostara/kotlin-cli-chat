@@ -4,6 +4,7 @@ package io.kcc.model
  * The main purpose of 'data class' is to hold data.
  * The compiler automatically derives equals(), hashCode(), toString() members from all properties
  * declared in the primary constructor.
+ * [see](https://kotlinlang.org/docs/data-classes.html)
  */
 data class User(
     val name: Name,
@@ -11,7 +12,8 @@ data class User(
 ) {
 
     /**
-     *  'trimMargin' trims leading whitespace characters followed by marginPrefix ('|' as default) from every line.
+     * The 'trimMargin' trims leading whitespace characters followed by marginPrefix ('|' as default) from every line.
+     * [see](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/trim-margin.html)
      */
     override fun toString() = """
         |user:
@@ -26,6 +28,7 @@ data class User(
     /**
      * Kotlin nested classes don’t have access to the outer class instance, unless you specifically request that.
      * They are like the static nested classes in Java.
+     * [see](https://kotlinlang.org/docs/nested-classes.html#inner-classes)
      */
     class Name(initValue: String) {
         // Property 'value' initialized by the constructor 'initValue' parameter after validation

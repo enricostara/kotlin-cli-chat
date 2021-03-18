@@ -3,7 +3,8 @@ package io.kcc.model
 import java.net.URL
 
 /**
- *  Use a standard class in order to validate constructor parameter
+ *  Use a standard class in order to validate constructor parameters
+ *  [see](https://kotlinlang.org/docs/classes.html#constructors)
  */
 class Host(initUrl: String) {
     // Property 'value' initialized by the constructor 'initUrl' parameter after validation

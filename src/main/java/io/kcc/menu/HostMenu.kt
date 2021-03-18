@@ -8,13 +8,17 @@ const val unregisterMenuItem = "unreg"
 
 /**
  * Use 'object' to declare a singleton, a class for which you need only one instance.
+ * [see](https://kotlinlang.org/docs/object-declarations.html)
  */
 object HostMenu {
 
     /**
      * A variable number of arguments 'vararg' can also be used to receive a list of strings.
+     * [see](https://kotlinlang.org/docs/functions.html#variable-number-of-arguments-varargs)
+     *
      * It returns '() -> Unit', a function corresponding to the user input.
      * This 'Unit' type corresponds to the 'void' type in Java.
+     * [see](https://kotlinlang.org/docs/functions.html#unit-returning-functions)
      */
     fun translateUserInput(vararg args: String): () -> Unit = when {
         // Use 'when' without an argument to manage more complex cases by providing Boolean expressions.

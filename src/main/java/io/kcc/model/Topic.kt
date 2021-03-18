@@ -1,7 +1,8 @@
 package io.kcc.model
 
 /**
- *  Use a standard class in order to validate constructor parameter
+ *  Use a standard class in order to validate constructor parameters
+ *  [see](https://kotlinlang.org/docs/classes.html#constructors)
  */
 class Topic(initName: String) {
     // Property 'value' initialized by the constructor 'initName' parameter after validation

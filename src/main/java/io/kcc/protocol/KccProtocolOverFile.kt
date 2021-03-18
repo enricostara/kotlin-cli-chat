@@ -20,6 +20,7 @@ object KccProtocolOverFile : KccProtocol {
 
     /**
      * The 'substring*' String extension function at the rescue
+     * [see](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/)
      */
     override fun readTopics(): Set<Topic> =
         File(host.url.path).walk()

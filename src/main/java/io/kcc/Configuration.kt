@@ -8,7 +8,7 @@ import java.io.File
 import java.util.*
 
 /**
- * 'const' is much like using the 'static' keyword in Java.
+ *  The 'const' is much like using the 'static' keyword in Java.
  *  Compiler inlines the 'const val' values where they are used.
  *  This inlining is much more efficient than getting a static value from a class.
  */
@@ -25,15 +25,16 @@ const val hostUrl = "host.url"
 const val hostNotRegistered = "No hosts have been registered yet!"
 
 /**
- * 'path' is a read-only property of the configuration class.
+ * The 'path' is a read-only property of the configuration class.
  * It is initialized in the constructor and can be accessed through the corresponding getter.
  * It has a default value in the declaration which avoid creating constructor overload.
+ * [see](https://kotlinlang.org/docs/functions.html#default-arguments)
  */
 class Configuration(val path: String = System.getProperty(userHome)) {
 
     /**
-     * 'hashMapOf()' without arguments returns an empty HashMap.
-     * 'configMap' is the backing property for the 'configView' immutable map
+     * A 'hashMapOf()' without arguments returns an empty HashMap.
+     * The 'configMap' is the backing property for the 'configView' immutable map
      */
     private val configMap = hashMapOf<String, String>()
     val configView: Map<String, String>
@@ -52,8 +53,8 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     }
 
     /**
-     * the 'config' parameter in the function declaration has the 'configMap' property as a default value to provide
-     * the standard use of the method with no arguments and to support unit tests in isolation by receiving a test configuration map.
+     * The 'config' parameter in the function declaration has the 'configMap' property as a default value to provide
+     * The standard use of the method with no arguments and to support unit tests in isolation by receiving a test configuration map.
      */
     fun readUser(config: Map<String, String> = configMap): User {
         // 'checkNotNull' throws an IllegalStateException if the value is null. Otherwise returns the not null value.
