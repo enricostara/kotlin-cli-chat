@@ -41,9 +41,12 @@ object TopicMenu {
 
     internal fun readTopics() {
         try {
-            val user = Configuration().load().readUser()
+            val configuration = Configuration().load()
+            val user = configuration.readUser()
             val protocol = getProtocol()
             val topics = protocol.readTopics()
+            user.validateTopics(topics)
+            configuration.updateUser(user).store()
             println("""
                 |topics: ${
                 when {
@@ -80,6 +83,7 @@ object TopicMenu {
             val protocol = getProtocol()
             val topic = Topic(name)
             protocol.joinTopic(topic, user)
+            user.validateTopics(protocol.readTopics())
             user.joinTopic(topic)
             configuration.updateUser(user).store()
             println("topic $topic has been joined.")
@@ -90,18 +94,22 @@ object TopicMenu {
     }
 
     internal fun leaveTopic(name: String) {
+        val configuration = Configuration().load()
         try {
-            val configuration = Configuration().load()
             val user = configuration.readUser()
             val protocol = getProtocol()
+            user.validateTopics(protocol.readTopics())
+            configuration.updateUser(user)
             val topic = Topic(name)
             protocol.leaveTopic(topic, user)
             user.leaveTopic(topic)
-            configuration.updateUser(user).store()
+            configuration.updateUser(user)
             println("topic $topic has been left.")
         } catch (e: Exception) {
             println("$errorMessage${e.message}\n")
             printHelpMessage()
+        } finally {
+            configuration.store()
         }
     }
 

@@ -23,7 +23,7 @@ data class User(
         topics.remove(topic)
     }
 
-    fun validateTopics(hostTopics: List<Topic>) {
+    fun validateTopics(hostTopics: Set<Topic>) {
         // Retains only the topics that are contained in the host topic collection.
         topics.retainAll(hostTopics)
     }

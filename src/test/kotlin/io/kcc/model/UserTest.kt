@@ -38,7 +38,7 @@ internal class UserTest {
     @Test
     fun validateTopics() {
         val user = User(User.Name("enrico"), arrayListOf(Topic("pascal"), Topic("kotlin"), Topic("java")))
-        user.validateTopics(listOf(Topic("kotlin"), Topic("java")))
+        user.validateTopics(setOf(Topic("kotlin"), Topic("java")))
         Assertions.assertArrayEquals(arrayOf(Topic("kotlin"), Topic("java")), user.topics.toTypedArray())
     }
 }
