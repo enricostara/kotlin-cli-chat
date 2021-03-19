@@ -23,6 +23,11 @@ data class User(
         topics.remove(topic)
     }
 
+    fun validateTopics(hostTopics: List<Topic>) {
+        // Retains only the topics that are contained in the host topic collection.
+        topics.retainAll(hostTopics)
+    }
+
     /**
      * The 'trimMargin' trims leading whitespace characters followed by marginPrefix ('|' as default) from every line.
      * [see](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/trim-margin.html)
