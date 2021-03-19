@@ -53,7 +53,7 @@ object KccProtocolOverFile : KccProtocol {
         val topics = readTopics()
         if (!topics.contains(topic)) error("cannot delete topic $topic, doesn't even exist!")
         val file = File(retrieveTopicFilePath(topic))
-        if (!file.exists()) error("user ${topic.owner} cannot delete topic $topic")
+        if (!file.exists()) error("user ${topic.owner?.name} cannot delete topic $topic")
         file.delete()
     }
 
