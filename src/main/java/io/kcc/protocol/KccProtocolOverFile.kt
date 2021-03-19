@@ -33,12 +33,13 @@ object KccProtocolOverFile : KccProtocol {
     override fun createTopic(topic: Topic) {
         val topics = readTopics()
         // use 'error' that throws an IllegalStateException with the given message
-        if (topics.contains(topic)) error("Topic $topic already exists!")
+        if (topics.contains(topic)) error("topic $topic already exists!")
         File("${host.url.path}${File.separator}.${topic.name}${topic.owner?.name}.kcc").createNewFile()
     }
 
     override fun joinTopic(topic: Topic, user: User) {
-        TODO("Not yet implemented")
+        val topics = readTopics()
+        if (!topics.contains(topic)) error("cannot join topic $topic, doesn't even exist!")
     }
 
     override fun leaveTopic(topic: Topic, user: User) {

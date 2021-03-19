@@ -42,7 +42,7 @@ object UserMenu {
     internal fun createUser(name: String) {
         try {
             val user = Configuration().load().createUser(name).store().readUser()
-            println("The user ${user.name} has been created.")
+            println("user ${user.name} has been created.")
         } catch (e: Exception) {
             println("$errorMessage${e.message}\n")
             printHelpMessage()
@@ -56,7 +56,7 @@ object UserMenu {
             val oldName = user.name.toString()
             user.name.value = newName
             configuration.updateUser(user).store().readUser()
-            println("The user $oldName is now known as ${user.name}")
+            println("user $oldName is now known as ${user.name}")
         } catch (e: Exception) {
             println("$errorMessage${e.message}\n")
             printHelpMessage()
@@ -68,7 +68,7 @@ object UserMenu {
             val configuration = Configuration().load()
             val user = configuration.readUser()
             configuration.deleteUser().store()
-            println("The user ${user.name} has been deleted.")
+            println("user ${user.name} has been deleted.")
         } catch (e: IllegalStateException) {
             println("$errorMessage${e.message}\n")
             printHelpMessage()

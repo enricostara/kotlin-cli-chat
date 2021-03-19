@@ -30,10 +30,10 @@ data class User(
     override fun toString() = """
         |user:
         |  name: $name                
-        |  subsc: ${
+        |  topics: ${
         when {
             topics.isEmpty() -> "no /topics"
-            else -> topics.joinToString("\n|    - ", "\n|    - ", "") { it.name }
+            else -> topics.joinToString("\n|    - ", "\n|    - ", "") { it.toString() }
         }
     }""".trimMargin()
 

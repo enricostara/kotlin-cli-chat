@@ -2,6 +2,7 @@ package io.kcc.menu
 
 import io.kcc.Configuration
 import io.kcc.errorMessage
+import io.kcc.model.Topic
 import io.kcc.protocol.KccProtocol
 import io.kcc.protocol.provideKccProtocolHandler
 
@@ -48,7 +49,8 @@ object TopicMenu {
                 when {
                     topics.isEmpty() -> "no /topics"
                     else -> topics.joinToString("\n|    - ", "\n|    - ", "") {
-                        "${it.name}${if (user.topics.contains(it)) " *" else ""}"
+                        // if-else is an expression and it is much more readable than the Java ternary operator 
+                        "$it${if (user.topics.contains(it)) "\t*" else ""}"
                     }
                 }
             }""".trimMargin())
@@ -60,9 +62,11 @@ object TopicMenu {
 
     internal fun createTopic(name: String) {
         try {
-            println("Create topic $name")
-//            val user = Configuration().load().createUser(name).store().readUser()
-//            println("The user ${user.name} has been created.")
+            val user = Configuration().load().readUser()
+            val protocol = getProtocol()
+            val topic = Topic(name, user)
+            protocol.createTopic(topic)
+            println("topic $topic has been created.")
         } catch (e: Exception) {
             println("$errorMessage${e.message}\n")
             printHelpMessage()
@@ -71,7 +75,13 @@ object TopicMenu {
 
     internal fun joinTopic(name: String) {
         try {
-            println("Join topic $name")
+            val user = Configuration().load().readUser()
+            val protocol = getProtocol()
+            val topic = Topic(name)
+            protocol.joinTopic(topic, user)
+            user.joinTopic(topic)
+            Configuration().load().updateUser(user).store()
+            println("topic $topic has been joined.")
         } catch (e: Exception) {
             println("$errorMessage${e.message}\n")
             printHelpMessage()

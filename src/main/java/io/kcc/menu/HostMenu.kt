@@ -39,7 +39,7 @@ object HostMenu {
     internal fun registerHost(hostUrl: String) {
         try {
             val host = Configuration().load().registerHost(hostUrl).store().readHost()
-            println("The host ${host.url} has been registered.")
+            println("host ${host.url} has been registered.")
         } catch (e: Exception) {
             println("$errorMessage${e.message}\n")
             UserMenu.printHelpMessage()
@@ -51,7 +51,7 @@ object HostMenu {
             val configuration = Configuration().load()
             val host = configuration.readHost()
             configuration.unregisterHost().store()
-            println("The host ${host.url} has been unregistered.")
+            println("host ${host.url} has been unregistered.")
         } catch (e: Exception) {
             println("$errorMessage${e.message}\n")
             UserMenu.printHelpMessage()
