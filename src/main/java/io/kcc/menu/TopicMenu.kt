@@ -3,7 +3,6 @@ package io.kcc.menu
 import io.kcc.Configuration
 import io.kcc.errorMessage
 import io.kcc.model.Topic
-import io.kcc.protocol.KccProtocol
 import io.kcc.protocol.provideKccProtocolHandler
 
 const val joinMenuItem = "join"
@@ -34,93 +33,128 @@ object TopicMenu {
         else -> TopicMenu::printHelpMessage
     }
 
-    private fun getProtocol(): KccProtocol {
-        val host = Configuration().load().readHost()
-        return provideKccProtocolHandler(host)
-    }
-
+    /**
+     * The 'apply' extension here calls the specified function block with 'this: Configuration' value as its receiver.
+     * [see](https://kotlinlang.org/docs/scope-functions.html#apply)
+     */
     internal fun readTopics() {
-        try {
-            val configuration = Configuration().load()
-            val user = configuration.readUser()
-            val protocol = getProtocol()
-            val topics = protocol.readTopics()
-            user.validateTopics(topics)
-            configuration.updateUser(user).store()
-            println("""
-                |topics: ${
-                when {
-                    topics.isEmpty() -> "no /topics"
-                    else -> topics.joinToString("\n|    - ", "\n|    - ", "") {
-                        // if-else is an expression and it is much more readable than the Java ternary operator 
-                        "$it${if (user.topics.contains(it)) "\t*" else ""}"
+        Configuration().apply {
+            try {
+                load()
+                val user = readUser()
+                val protocol = provideKccProtocolHandler(readHost())
+                val topics = protocol.readTopics()
+                user.validateTopics(topics)
+                updateUser(user).store()
+                println("""
+                    |topics: ${
+                    when {
+                        topics.isEmpty() -> "no /topics"
+                        else -> topics.joinToString("\n|    - ", "\n|    - ", "") {
+                            // if-else is an expression and it is much more readable than the Java ternary operator 
+                            "$it${if (user.topics.contains(it)) "\t*" else ""}"
+                        }
                     }
-                }
-            }""".trimMargin())
-        } catch (e: IllegalStateException) {
-            println("$errorMessage${e.message}\n")
-            printHelpMessage()
+                }""".trimMargin())
+            } catch (e: IllegalStateException) {
+                println("$errorMessage${e.message}\n")
+                printHelpMessage()
+            }
         }
     }
 
+    /**
+     * The 'apply' extension here calls the specified function block with 'this: Configuration' value as its receiver.
+     * [see](https://kotlinlang.org/docs/scope-functions.html#apply)
+     */
     internal fun createTopic(name: String) {
-        try {
-            val user = Configuration().load().readUser()
-            val protocol = getProtocol()
-            val topic = Topic(name, user)
-            protocol.createTopic(topic)
-            println("topic $topic has been created.")
-        } catch (e: Exception) {
-            println("$errorMessage${e.message}\n")
-            printHelpMessage()
+        Configuration().apply {
+            try {
+                load()
+                val user = readUser()
+                val protocol = provideKccProtocolHandler(readHost())
+                val topic = Topic(name, user)
+                protocol.createTopic(topic)
+                println("topic $topic has been created.")
+            } catch (e: Exception) {
+                println("$errorMessage${e.message}\n")
+                printHelpMessage()
+            }
         }
     }
 
+    /**
+     * The 'apply' extension here calls the specified function block with 'this: Configuration' value as its receiver.
+     * [see](https://kotlinlang.org/docs/scope-functions.html#apply)
+     */
     internal fun joinTopic(name: String) {
-        try {
-            val configuration = Configuration().load()
-            val user = configuration.readUser()
-            val protocol = getProtocol()
-            val topic = Topic(name)
-            protocol.joinTopic(topic, user)
-            user.validateTopics(protocol.readTopics())
-            user.joinTopic(topic)
-            configuration.updateUser(user).store()
-            println("topic $topic has been joined.")
-        } catch (e: Exception) {
-            println("$errorMessage${e.message}\n")
-            printHelpMessage()
+        Configuration().apply {
+            try {
+                load()
+                val user = readUser()
+                val protocol = provideKccProtocolHandler(readHost())
+                val topic = Topic(name)
+                protocol.joinTopic(topic)
+                user.validateTopics(protocol.readTopics())
+                user.joinTopic(topic)
+                updateUser(user).store()
+                println("topic $topic has been joined.")
+            } catch (e: Exception) {
+                println("$errorMessage${e.message}\n")
+                printHelpMessage()
+            }
         }
     }
 
+    /**
+     * The 'apply' extension here calls the specified function block with 'this: Configuration' value as its receiver.
+     * [see](https://kotlinlang.org/docs/scope-functions.html#apply)
+     */
     internal fun leaveTopic(name: String) {
-        val configuration = Configuration().load()
-        try {
-            val user = configuration.readUser()
-            val protocol = getProtocol()
-            user.validateTopics(protocol.readTopics())
-            configuration.updateUser(user)
-            val topic = Topic(name)
-            protocol.leaveTopic(topic, user)
-            user.leaveTopic(topic)
-            configuration.updateUser(user)
-            println("topic $topic has been left.")
-        } catch (e: Exception) {
-            println("$errorMessage${e.message}\n")
-            printHelpMessage()
-        } finally {
-            configuration.store()
+        Configuration().apply {
+            try {
+                load()
+                val user = readUser()
+                val protocol = provideKccProtocolHandler(readHost())
+                user.validateTopics(protocol.readTopics())
+                updateUser(user)
+                val topic = Topic(name)
+                protocol.leaveTopic(topic)
+                user.leaveTopic(topic)
+                updateUser(user)
+                println("topic $topic has been left.")
+            } catch (e: Exception) {
+                println("$errorMessage${e.message}\n")
+                printHelpMessage()
+            } finally {
+                store()
+            }
         }
     }
 
+    /**
+     * The 'apply' extension here calls the specified function block with 'this: Configuration' value as its receiver.
+     * [see](https://kotlinlang.org/docs/scope-functions.html#apply)
+     */
     internal fun deleteTopic(name: String) {
-        try {
-            println("Delete topic $name")
-//            val user = Configuration().load().createUser(name).store().readUser()
-//            println("The user ${user.name} has been created.")
-        } catch (e: Exception) {
-            println("$errorMessage${e.message}\n")
-            printHelpMessage()
+        Configuration().apply {
+            try {
+                load()
+                val user = readUser()
+                val protocol = provideKccProtocolHandler(readHost())
+                user.validateTopics(protocol.readTopics())
+                updateUser(user)
+                val topic = Topic(name, user)
+                protocol.deleteTopic(topic)
+                user.leaveTopic(topic)
+                updateUser(user)
+                println("topic $topic has been deleted.")
+            } catch (e: Exception) {
+                println("$errorMessage${e.message}\n")
+                printHelpMessage()
+            } finally {
+                store()
+            }
         }
     }
 

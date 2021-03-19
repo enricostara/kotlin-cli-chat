@@ -2,6 +2,7 @@ package io.kcc.menu
 
 import io.kcc.Configuration
 import io.kcc.errorMessage
+import io.kcc.model.User
 
 const val renameMenuItem = "ren"
 
@@ -49,29 +50,41 @@ object UserMenu {
         }
     }
 
+    /**
+     * The 'apply' extension here calls the specified function block with 'this: Configuration' value as its receiver.
+     * [see](https://kotlinlang.org/docs/scope-functions.html#apply)
+     */
     internal fun renameUser(newName: String) {
-        try {
-            val configuration = Configuration().load()
-            val user = configuration.readUser()
-            val oldName = user.name.toString()
-            user.name.value = newName
-            configuration.updateUser(user).store().readUser()
-            println("user $oldName is now known as ${user.name}")
-        } catch (e: Exception) {
-            println("$errorMessage${e.message}\n")
-            printHelpMessage()
+        Configuration().apply {
+            try {
+                load()
+                val user = readUser()
+                val oldName = user.name.toString()
+                user.name = User.Name(newName)
+                updateUser(user).store()
+                println("user $oldName is now known as ${user.name}")
+            } catch (e: Exception) {
+                println("$errorMessage${e.message}\n")
+                printHelpMessage()
+            }
         }
     }
 
+    /**
+     * The 'apply' extension here calls the specified function block with 'this: Configuration' value as its receiver.
+     * [see](https://kotlinlang.org/docs/scope-functions.html#apply)
+     */
     internal fun deleteUser() {
-        try {
-            val configuration = Configuration().load()
-            val user = configuration.readUser()
-            configuration.deleteUser().store()
-            println("user ${user.name} has been deleted.")
-        } catch (e: IllegalStateException) {
-            println("$errorMessage${e.message}\n")
-            printHelpMessage()
+        Configuration().apply {
+            try {
+                load()
+                val user = readUser()
+                deleteUser().store()
+                println("user ${user.name} has been deleted.")
+            } catch (e: IllegalStateException) {
+                println("$errorMessage${e.message}\n")
+                printHelpMessage()
+            }
         }
     }
 

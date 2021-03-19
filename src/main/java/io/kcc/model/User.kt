@@ -9,7 +9,7 @@ const val userSymbol = '#'
  * [see](https://kotlinlang.org/docs/data-classes.html)
  */
 data class User(
-    val name: Name,
+    var name: Name,
     val topics: MutableList<Topic> = arrayListOf()
 ) {
 

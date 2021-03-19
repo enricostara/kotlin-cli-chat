@@ -46,15 +46,21 @@ object HostMenu {
         }
     }
 
+    /**
+     * The 'apply' extension here calls the specified function block with 'this: Configuration' value as its receiver.
+     * [see](https://kotlinlang.org/docs/scope-functions.html#apply)
+     */
     internal fun unregisterHost() {
-        try {
-            val configuration = Configuration().load()
-            val host = configuration.readHost()
-            configuration.unregisterHost().store()
-            println("host ${host.url} has been unregistered.")
-        } catch (e: Exception) {
-            println("$errorMessage${e.message}\n")
-            UserMenu.printHelpMessage()
+        Configuration().apply {
+            try {
+                load()
+                val host = readHost()
+                unregisterHost().store()
+                println("host ${host.url} has been unregistered.")
+            } catch (e: Exception) {
+                println("$errorMessage${e.message}\n")
+                UserMenu.printHelpMessage()
+            }
         }
     }
 
