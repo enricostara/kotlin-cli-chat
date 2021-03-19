@@ -18,11 +18,11 @@ const val errorMessage = "error:\n    "
 const val userHome = "user.home"
 const val userName = "user.name"
 const val userTopics = "user.topics"
-const val userNotFound = "no users have been created yet"
+const val userNotFound = "no user has been created yet"
 const val userAlreadyExists = "another user already exists"
 
 const val hostUrl = "host.url"
-const val hostNotRegistered = "No host has been registered yet!"
+const val hostNotRegistered = "no host has been registered yet!"
 
 /**
  * The 'path' is a read-only property of the configuration class.

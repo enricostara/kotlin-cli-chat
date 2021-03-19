@@ -25,7 +25,6 @@ object KccProtocolOverFile : KccProtocol {
             .map { Topic(it.name.substringAfter('.').substringBefore(userSymbol)) }
             .toSet()
 
-
     /**
      * The topic.owner could be null, then the safe call operator ?. has been used to get the owner's name
      * [see](https://kotlinlang.org/docs/null-safety.html#safe-calls)
@@ -43,7 +42,8 @@ object KccProtocolOverFile : KccProtocol {
     }
 
     override fun leaveTopic(topic: Topic, user: User) {
-        TODO("Not yet implemented")
+        val topics = readTopics()
+        if (!topics.contains(topic)) error("cannot leave topic $topic, doesn't even exist!")
     }
 
     override fun deleteTopic(topic: Topic, user: User) {
