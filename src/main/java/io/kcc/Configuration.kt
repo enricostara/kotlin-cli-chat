@@ -8,7 +8,7 @@ import java.io.File
 import java.util.*
 
 /**
- * 'const' is much like using the 'static' keyword in Java.
+ *  The 'const' is much like using the 'static' keyword in Java.
  *  Compiler inlines the 'const val' values where they are used.
  *  This inlining is much more efficient than getting a static value from a class.
  */
@@ -18,22 +18,23 @@ const val errorMessage = "error:\n    "
 const val userHome = "user.home"
 const val userName = "user.name"
 const val userTopics = "user.topics"
-const val userNotFound = "no users have been created yet"
+const val userNotFound = "no user has been created yet"
 const val userAlreadyExists = "another user already exists"
 
 const val hostUrl = "host.url"
-const val hostNotRegistered = "No hosts have been registered yet!"
+const val hostNotRegistered = "no host has been registered yet!"
 
 /**
- * 'path' is a read-only property of the configuration class.
+ * The 'path' is a read-only property of the configuration class.
  * It is initialized in the constructor and can be accessed through the corresponding getter.
  * It has a default value in the declaration which avoid creating constructor overload.
+ * [see](https://kotlinlang.org/docs/functions.html#default-arguments)
  */
 class Configuration(val path: String = System.getProperty(userHome)) {
 
     /**
-     * 'hashMapOf()' without arguments returns an empty HashMap.
-     * 'configMap' is the backing property for the 'configView' immutable map
+     * A 'hashMapOf()' without arguments returns an empty HashMap.
+     * The 'configMap' is the backing property for the 'configView' immutable map
      */
     private val configMap = hashMapOf<String, String>()
     val configView: Map<String, String>
@@ -52,8 +53,8 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     }
 
     /**
-     * the 'config' parameter in the function declaration has the 'configMap' property as a default value to provide
-     * the standard use of the method with no arguments and to support unit tests in isolation by receiving a test configuration map.
+     * The 'config' parameter in the function declaration has the 'configMap' property as a default value to provide
+     * The standard use of the method with no arguments and to support unit tests in isolation by receiving a test configuration map.
      */
     fun readUser(config: Map<String, String> = configMap): User {
         // 'checkNotNull' throws an IllegalStateException if the value is null. Otherwise returns the not null value.
@@ -61,13 +62,13 @@ class Configuration(val path: String = System.getProperty(userHome)) {
         val topicsProp = config[userTopics]
         // 'when' is an expression and it is an advanced form of the Java 'switch-case' statement.
         // it can be used without argument, then the case expressions should evaluate as either true or false.
-        val topics: List<Topic> = when {
+        val topics: MutableList<Topic> = when {
             // 'isNullOrEmpty()' is an 'extension' method that can check if a string is null or empty
             // 'listOf()' without arguments returns an empty list.
-            topicsProp.isNullOrEmpty() -> listOf()
+            topicsProp.isNullOrEmpty() -> arrayListOf()
             // '.map' accepts a lambda as an action.
             // 'it' refers to the collection item.
-            else -> topicsProp.split(',').map { Topic(it.trim()) }
+            else -> topicsProp.split(',').map { Topic(it.trim()) }.toMutableList()
         }
         return User(User.Name(username), topics)
     }

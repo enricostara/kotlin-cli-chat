@@ -4,21 +4,29 @@ import io.kcc.projectVersion
 
 const val userMenuItem = "user"
 const val hostMenuItem = "host"
+const val topicMenuItem = "topic"
 const val helpOption = "--help"
 const val helpShortOption = "-h"
 const val versionOption = "--version"
 const val messageShortOption = "-m"
 const val printShortOption = "-p"
 
+const val createMenuItem = "new"
+const val deleteMenuItem = "del"
+
 /**
  * Use 'object' to declare a singleton, a class for which you need only one instance.
+ * [see](https://kotlinlang.org/docs/object-declarations.html)
  */
 object MainMenu {
 
     /**
      * A variable number of arguments 'vararg' can also be used to receive a list of strings.
+     * [see](https://kotlinlang.org/docs/functions.html#variable-number-of-arguments-varargs)
+     *
      * It returns '() -> Unit', a function corresponding to the user input.
      * This 'Unit' type corresponds to the 'void' type in Java.
+     * [see](https://kotlinlang.org/docs/functions.html#unit-returning-functions)
      */
     fun translateUserInput(vararg args: String): () -> Unit {
         if (args.isEmpty()) {
@@ -32,13 +40,15 @@ object MainMenu {
             // with 'drop(1)' it will pass all arguments except the first (already used)
             userMenuItem -> UserMenu.translateUserInput(*(args.drop(1).toTypedArray()))
             hostMenuItem -> HostMenu.translateUserInput(*(args.drop(1).toTypedArray()))
+            topicMenuItem -> TopicMenu.translateUserInput(*(args.drop(1).toTypedArray()))
             else -> MainMenu::printHelpMessage
         }
     }
 
     /**
      * A function body can be an expression.
-     * 'internal' visibility means that any code declared in the same module can access this element, such as test code.
+     * The 'internal' visibility means that any code declared in the same module can access this element, such as test code.
+     * [see](https://kotlinlang.org/docs/visibility-modifiers.html#classes-and-interfaces)
      */
     internal fun printHelpMessage() = println(
         // Triple-quoted strings gives you an easy way to embed in your programs text containing line breaks,
@@ -47,6 +57,7 @@ object MainMenu {
         usage:
             kcc $userMenuItem
             kcc $hostMenuItem
+            kcc $topicMenuItem
             kcc $messageShortOption <msg>
             kcc $printShortOption <number_of_msg>
             kcc $helpShortOption | $helpOption
@@ -62,6 +73,7 @@ object MainMenu {
 
     /**
      *  String templates allow you to include variable references and expressions into strings.
+     *  [see](https://kotlinlang.org/docs/basic-syntax.html#string-templates)
      */
     internal fun printVersion() = println("kotlin-cli-client v$projectVersion")
 }
