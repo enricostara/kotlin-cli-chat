@@ -22,7 +22,7 @@ const val userNotFound = "no users have been created yet"
 const val userAlreadyExists = "another user already exists"
 
 const val hostUrl = "host.url"
-const val hostNotRegistered = "No hosts have been registered yet!"
+const val hostNotRegistered = "No host has been registered yet!"
 
 /**
  * The 'path' is a read-only property of the configuration class.

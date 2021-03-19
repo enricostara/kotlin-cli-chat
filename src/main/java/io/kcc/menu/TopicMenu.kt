@@ -1,6 +1,9 @@
 package io.kcc.menu
 
+import io.kcc.Configuration
 import io.kcc.errorMessage
+import io.kcc.protocol.KccProtocol
+import io.kcc.protocol.provideKccProtocolHandler
 
 const val joinMenuItem = "join"
 const val leaveMenuItem = "leave"
@@ -30,11 +33,25 @@ object TopicMenu {
         else -> TopicMenu::printHelpMessage
     }
 
+    private fun getProtocol(): KccProtocol {
+        val host = Configuration().load().readHost()
+        return provideKccProtocolHandler(host)
+    }
+
     internal fun readTopics() {
         try {
-            println("No topics")
-//            val user = Configuration().load().readUser()
-//            println(user)
+            val user = Configuration().load().readUser()
+            val protocol = getProtocol()
+            val topics = protocol.readTopics()
+            println("""
+                |topics: ${
+                when {
+                    topics.isEmpty() -> "no /topics"
+                    else -> topics.joinToString("\n|    - ", "\n|    - ", "") {
+                        "${it.name}${if (user.topics.contains(it)) " *" else ""}"
+                    }
+                }
+            }""".trimMargin())
         } catch (e: IllegalStateException) {
             println("$errorMessage${e.message}\n")
             printHelpMessage()

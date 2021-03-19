@@ -3,9 +3,6 @@ package io.kcc.menu
 import io.kcc.Configuration
 import io.kcc.errorMessage
 
-const val registerMenuItem = "reg"
-const val unregisterMenuItem = "unreg"
-
 /**
  * Use 'object' to declare a singleton, a class for which you need only one instance.
  * [see](https://kotlinlang.org/docs/object-declarations.html)
@@ -23,8 +20,8 @@ object HostMenu {
     fun translateUserInput(vararg args: String): () -> Unit = when {
         // Use 'when' without an argument to manage more complex cases by providing Boolean expressions.
         args.isEmpty() -> HostMenu::readHost
-        args[0] == registerMenuItem && args.size > 1 -> { -> registerHost(args[1]) }
-        args[0] == unregisterMenuItem -> HostMenu::unregisterHost
+        args[0] == createMenuItem && args.size > 1 -> { -> registerHost(args[1]) }
+        args[0] == deleteMenuItem -> HostMenu::unregisterHost
         else -> HostMenu::printHelpMessage
     }
 
@@ -65,8 +62,8 @@ object HostMenu {
         """ 
         usage:
             kcc $hostMenuItem
-            kcc $hostMenuItem $registerMenuItem <url>
-            kcc $hostMenuItem $unregisterMenuItem
+            kcc $hostMenuItem $createMenuItem <url>
+            kcc $hostMenuItem $deleteMenuItem
             kcc $hostMenuItem $helpShortOption | $helpOption
             
         options:

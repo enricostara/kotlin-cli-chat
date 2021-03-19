@@ -10,8 +10,8 @@ internal class HostMenuTest {
         assertEquals(HostMenu::readHost, HostMenu.translateUserInput())
         assertEquals(HostMenu::printHelpMessage, HostMenu.translateUserInput(helpShortOption))
         assertEquals(HostMenu::printHelpMessage, HostMenu.translateUserInput(helpOption))
-        assertEquals(HostMenu::printHelpMessage, HostMenu.translateUserInput(registerMenuItem))
-        assertEquals(HostMenu::unregisterHost, HostMenu.translateUserInput(unregisterMenuItem))
+        assertEquals(HostMenu::printHelpMessage, HostMenu.translateUserInput(createMenuItem))
+        assertEquals(HostMenu::unregisterHost, HostMenu.translateUserInput(deleteMenuItem))
         assert(
             !setOf<Function<Unit>>(
                 HostMenu::printHelpMessage,
@@ -19,7 +19,7 @@ internal class HostMenuTest {
                 HostMenu::unregisterHost
             ).contains(
                 UserMenu.translateUserInput(
-                    registerMenuItem,
+                    createMenuItem,
                     "file:/users/enrico"
                 )
             )
