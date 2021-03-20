@@ -16,10 +16,10 @@ interface KccProtocol {
 
     fun readTopics(): Set<Topic>
     fun createTopic(topic: Topic)
-    fun joinTopic(topic: Topic)
-    fun leaveTopic(topic: Topic)
+    fun joinTopic(topicName: String)
+    fun leaveTopic(topicName: String)
     fun deleteTopic(topic: Topic)
 
-    fun readMessages(topic: Topic, numOfMessage: Int): List<Message>
+    fun readMessages(topicName: String): List<Message>
     fun writeMessage(message: Message)
 }

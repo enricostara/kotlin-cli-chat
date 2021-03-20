@@ -1,12 +1,11 @@
 package io.kcc.protocol
 
-import io.kcc.model.Host
-import io.kcc.model.Message
-import io.kcc.model.Topic
-import io.kcc.model.userSymbol
+import io.kcc.model.*
 import java.io.File
 
 object KccProtocolOverFile : KccProtocol {
+
+    const val messageDelimiter: Char = '|'
 
     lateinit var host: Host
 
@@ -25,8 +24,20 @@ object KccProtocolOverFile : KccProtocol {
     override fun readTopics(): Set<Topic> =
         File(host.url.path).walk()
             .filter { it.extension == "kcc" }
-            .map { Topic(it.name.substringAfter('.').substringBefore(userSymbol)) }
+            .map {
+                Topic(
+                    it.name.substringAfter('.').substringBefore(userSymbol),
+                    User(User.Name(it.name.substringAfter(userSymbol).substringBeforeLast('.')))
+                )
+            }
             .toSet()
+
+    internal fun readTopic(topicName: String): Topic {
+        val topic = Topic(topicName)
+        val topics = readTopics().toMutableList()
+        if (!topics.contains(topic)) error("cannot read topic $topic', the topic doesn't even exist!")
+        return topics.apply { retainAll(listOf(topic)) }.first()
+    }
 
     /**
      * The topic.owner could be null, then the safe call operator ?. has been used to get the owner's name
@@ -39,14 +50,12 @@ object KccProtocolOverFile : KccProtocol {
         File(retrieveTopicFilePath(topic)).createNewFile()
     }
 
-    override fun joinTopic(topic: Topic) {
-        val topics = readTopics()
-        if (!topics.contains(topic)) error("cannot join topic $topic, doesn't even exist!")
+    override fun joinTopic(topicName: String) {
+        readTopic(topicName)
     }
 
-    override fun leaveTopic(topic: Topic) {
-        val topics = readTopics()
-        if (!topics.contains(topic)) error("cannot leave topic $topic, doesn't even exist!")
+    override fun leaveTopic(topicName: String) {
+        readTopic(topicName)
     }
 
     override fun deleteTopic(topic: Topic) {
@@ -57,8 +66,12 @@ object KccProtocolOverFile : KccProtocol {
         file.delete()
     }
 
-    override fun readMessages(topic: Topic, numOfMessage: Int): List<Message> {
-        TODO("Not yet implemented")
+    override fun readMessages(topicName: String): List<Message> {
+        val topic = readTopic(topicName)
+        val topicFile = File(retrieveTopicFilePath(topic))
+        return topicFile.readLines().map {
+            Message(topic, it.substringBefore(messageDelimiter), it.substringAfter(messageDelimiter))
+        }
     }
 
     override fun writeMessage(message: Message) {

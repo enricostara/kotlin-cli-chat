@@ -1,6 +1,8 @@
 package io.kcc.menu
 
+import io.kcc.Configuration
 import io.kcc.errorMessage
+import io.kcc.protocol.provideKccProtocolHandler
 
 /**
  * Use 'object' to declare a singleton, a class for which you need only one instance.
@@ -23,11 +25,21 @@ object MessageMenu {
     }
 
     internal fun readMessages(topic: String) {
-        try {
-            println("read msgs from topic $topic")
-        } catch (e: IllegalStateException) {
-            println("$errorMessage${e.message}\n")
-            MainMenu.printHelpMessage()
+        Configuration().apply {
+            try {
+                load()
+                val protocol = provideKccProtocolHandler(readHost())
+                val messages = protocol.readMessages(topic.drop(1))
+                println(
+                    when {
+                        messages.isEmpty() -> "$topic: no messages"
+                        else -> messages.joinToString("\n")
+                    }
+                )
+            } catch (e: IllegalStateException) {
+                println("$errorMessage${e.message}\n")
+                TopicMenu.printHelpMessage()
+            }
         }
     }
 
