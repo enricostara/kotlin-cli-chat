@@ -1,5 +1,6 @@
 package io.kcc.menu
 
+import io.kcc.model.topicSymbol
 import io.kcc.projectVersion
 
 const val userMenuItem = "user"
@@ -8,8 +9,6 @@ const val topicMenuItem = "topic"
 const val helpOption = "--help"
 const val helpShortOption = "-h"
 const val versionOption = "--version"
-const val messageShortOption = "-m"
-const val printShortOption = "-p"
 
 const val createMenuItem = "new"
 const val deleteMenuItem = "del"
@@ -41,7 +40,8 @@ object MainMenu {
             userMenuItem -> UserMenu.translateUserInput(*(args.drop(1).toTypedArray()))
             hostMenuItem -> HostMenu.translateUserInput(*(args.drop(1).toTypedArray()))
             topicMenuItem -> TopicMenu.translateUserInput(*(args.drop(1).toTypedArray()))
-            else -> MainMenu::printHelpMessage
+            // if-else is an expression and it is much more readable than the Java ternary operator
+            else -> if (args[0].startsWith(topicSymbol)) MessageMenu.translateUserInput(*args) else MainMenu::printHelpMessage
         }
     }
 
@@ -58,16 +58,14 @@ object MainMenu {
             kcc $userMenuItem
             kcc $hostMenuItem
             kcc $topicMenuItem
-            kcc $messageShortOption <msg>
-            kcc $printShortOption <number_of_msg>
+            kcc <${topicSymbol}topic> <msg>
+            kcc <${topicSymbol}topic>
             kcc $helpShortOption | $helpOption
             kcc $versionOption
             
         options:
-            $messageShortOption <msg>    Send a message to the topic
-            $printShortOption <n>      Print <n> number of topic's messages, 0 means all
-            $helpShortOption $helpOption   Show this screen
-            $versionOption   Show version
+            $helpShortOption $helpOption            Show this screen
+            $versionOption            Show version
         """.trimIndent()
     )
 
