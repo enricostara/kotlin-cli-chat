@@ -7,8 +7,7 @@ This project implements a simple command-line interface chat just to collect wha
 As an old Java developer with a few projects behind me, I wanted to take a picture of my first impressions of using Kotlin 
 and write this project as a guide/reference for myself and other developers who might find it useful.
 
-Probably the Kotlin I wrote will look still boring to the seasoned Kotlin programmers. 
-
+Probably the Kotlin I wrote will look still boring to the seasoned Kotlin programmers.
 However, it could represent what a Java programmer might find interesting to use Kotlin 
 without sacrificing code readability when used in a small or medium-sized team.
 
@@ -44,8 +43,7 @@ Nevertheless, I put all the very basic operational details in this readme file t
 The chat default implementation uses a simple file-based communication protocol; 
 therefore, users could use a network file system in local scenarios.
 
-It could also be that you decide, as an exercise, to fork this project and provide a more suitable server-based protocol.
-
-This might be easy as I will keep the default protocol implementation behind an interface and bound only with the `file` schema.
-So, for example, a new protocol could be added and implemented by calling a http-server using rest calls 
-and bound to the `http` schema.
+It may also be that you decide, as an exercise, to fork this project and provide a more suitable server-based protocol.
+This could be easy as I will keep the default protocol implementation behind an interface and bound only to the `file` schema.
+For example, a new protocol could be added and implemented by calling an HTTP server using rest calls 
+and associated with the `http` schema instead.
