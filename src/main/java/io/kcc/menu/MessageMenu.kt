@@ -2,6 +2,8 @@ package io.kcc.menu
 
 import io.kcc.Configuration
 import io.kcc.errorMessage
+import io.kcc.model.Message
+import io.kcc.model.Topic
 import io.kcc.protocol.provideKccProtocolHandler
 
 /**
@@ -20,8 +22,8 @@ object MessageMenu {
      */
     fun translateUserInput(vararg args: String): () -> Unit = when {
         // Use 'when' without an argument to manage more complex cases by providing Boolean expressions.
-        args.size > 1 -> { -> sendMessage(args[0], args[1]) }
-        else -> { -> readMessages(args[0]) }
+        args.size > 1 -> { -> sendMessage(args[0].drop(1), *(args.drop(1)).toTypedArray()) }
+        else -> { -> readMessages(args[0].drop(1)) }
     }
 
     internal fun readMessages(topic: String) {
@@ -29,26 +31,34 @@ object MessageMenu {
             try {
                 load()
                 val protocol = provideKccProtocolHandler(readHost())
-                val messages = protocol.readMessages(topic.drop(1))
+                val messages = protocol.readMessages(topic)
                 println(
                     when {
                         messages.isEmpty() -> "$topic: no messages"
                         else -> messages.joinToString("\n")
                     }
                 )
-            } catch (e: IllegalStateException) {
+            } catch (e: Exception) {
                 println("$errorMessage${e.message}\n")
-                TopicMenu.printHelpMessage()
+                MainMenu.printHelpMessage()
             }
         }
     }
 
-    internal fun sendMessage(topic: String, message: String) {
-        try {
-            println("send msg '$message' to topic $topic")
-        } catch (e: Exception) {
-            println("$errorMessage${e.message}\n")
-            MainMenu.printHelpMessage()
+    internal fun sendMessage(topic: String, vararg words: String) {
+        Configuration().apply {
+            try {
+                load()
+                val user = readUser()
+                val protocol = provideKccProtocolHandler(readHost())
+                val msg = Message(Topic(topic), user.name.toString(), words.joinToString(" "))
+                protocol.sendMessage(msg)
+                val messages = protocol.readMessages(topic, 3)
+                println(messages.joinToString("\n"))
+            } catch (e: Exception) {
+                println("$errorMessage${e.message}\n")
+                MainMenu.printHelpMessage()
+            }
         }
     }
 }
