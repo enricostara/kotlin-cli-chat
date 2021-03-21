@@ -26,15 +26,18 @@ object MessageMenu {
         else -> { -> readMessages(args[0].drop(1)) }
     }
 
-    internal fun readMessages(topic: String) {
+    internal fun readMessages(topicName: String) {
         Configuration().apply {
             try {
                 load()
+                val user = readUser()
+                val topic = Topic(topicName)
+                require(user.joinedTopic(topic)) { "user ${user.name} has to join the topic $topic before reading messages!" }
                 val protocol = provideKccProtocolHandler(readHost())
-                val messages = protocol.readMessages(topic)
+                val messages = protocol.readMessages(topicName)
                 println(
                     when {
-                        messages.isEmpty() -> "$topic: no messages"
+                        messages.isEmpty() -> "$topicName: no messages"
                         else -> messages.joinToString("\n")
                     }
                 )
@@ -45,15 +48,17 @@ object MessageMenu {
         }
     }
 
-    internal fun sendMessage(topic: String, vararg words: String) {
+    internal fun sendMessage(topicName: String, vararg words: String) {
         Configuration().apply {
             try {
                 load()
                 val user = readUser()
+                val topic = Topic(topicName)
+                require(user.joinedTopic(topic)) { "user ${user.name} has to join the topic $topic before sending a message!" }
                 val protocol = provideKccProtocolHandler(readHost())
-                val msg = Message(Topic(topic), user.name.toString(), words.joinToString(" "))
+                val msg = Message(topic, user.name.toString(), words.joinToString(" "))
                 protocol.sendMessage(msg)
-                val messages = protocol.readMessages(topic, 3)
+                val messages = protocol.readMessages(topicName, 3)
                 println(messages.joinToString("\n"))
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
