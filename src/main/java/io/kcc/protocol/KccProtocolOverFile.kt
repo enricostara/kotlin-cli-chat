@@ -16,6 +16,7 @@ object KccProtocolOverFile : KccProtocol {
     override fun accept(requiredHost: Host): Boolean = when (requiredHost.url.protocol) {
         "file" -> {
             host = requiredHost
+            require(File(host.url.path).exists()) { "cannot accept path ${host.url.path}, it doesn't exist!" }
             true
         }
         else -> false
@@ -39,7 +40,8 @@ object KccProtocolOverFile : KccProtocol {
     internal fun readTopic(topicName: String): Topic {
         val topic = Topic(topicName)
         val topics = readTopics().toMutableList()
-        if (!topics.contains(topic)) error("cannot read topic $topic', it doesn't exist!")
+        // 'require' throws an IllegalArgumentException with the result of calling lambda if the condition is false.
+        require(topics.contains(topic)) { "cannot access topic $topic, it doesn't exist!" }
         return topics.apply { retainAll(listOf(topic)) }.first()
     }
 
@@ -49,8 +51,8 @@ object KccProtocolOverFile : KccProtocol {
      */
     override fun createTopic(topic: Topic) {
         val topics = readTopics()
-        // use 'error' that throws an IllegalStateException with the given message
-        if (topics.contains(topic)) error("topic $topic already exists!")
+        // 'require' throws an IllegalArgumentException with the result of calling lambda if the condition is false.
+        require(!topics.contains(topic)) { "topic $topic already exists!" }
         File(retrieveTopicFilePath(topic)).createNewFile()
     }
 
@@ -64,9 +66,10 @@ object KccProtocolOverFile : KccProtocol {
 
     override fun deleteTopic(topic: Topic) {
         val topics = readTopics()
-        if (!topics.contains(topic)) error("cannot delete topic $topic, it doesn't even exist!")
+        // 'require' throws an IllegalArgumentException with the result of calling lambda if the condition is false.
+        require(topics.contains(topic)) { "cannot delete topic $topic, it doesn't even exist!" }
         val file = File(retrieveTopicFilePath(topic))
-        if (!file.exists()) error("user ${topic.owner?.name} cannot delete topic $topic")
+        require(file.exists()) { "user ${topic.owner?.name} cannot delete topic $topic" }
         file.delete()
     }
 

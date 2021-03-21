@@ -30,7 +30,7 @@ object HostMenu {
         try {
             val host = Configuration().load().readHost()
             println(host)
-        } catch (e: IllegalStateException) {
+        } catch (e: IllegalArgumentException) {
             println("$errorMessage${e.message}\n")
             printHelpMessage()
         }
@@ -57,7 +57,7 @@ object HostMenu {
                 val host = readHost()
                 unregisterHost().store()
                 println("host ${host.url} has been unregistered.")
-            } catch (e: Exception) {
+            } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
                 UserMenu.printHelpMessage()
             }

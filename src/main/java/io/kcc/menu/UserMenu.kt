@@ -34,7 +34,7 @@ object UserMenu {
         try {
             val user = Configuration().load().readUser()
             println(user)
-        } catch (e: IllegalStateException) {
+        } catch (e: IllegalArgumentException) {
             println("$errorMessage${e.message}\n")
             printHelpMessage()
         }
@@ -44,7 +44,7 @@ object UserMenu {
         try {
             val user = Configuration().load().createUser(name).store().readUser()
             println("user ${user.name} has been created.")
-        } catch (e: Exception) {
+        } catch (e: IllegalArgumentException) {
             println("$errorMessage${e.message}\n")
             printHelpMessage()
         }
@@ -63,7 +63,7 @@ object UserMenu {
                 user.name = User.Name(newName)
                 updateUser(user).store()
                 println("user $oldName is now known as ${user.name}")
-            } catch (e: Exception) {
+            } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
                 printHelpMessage()
             }
@@ -81,7 +81,7 @@ object UserMenu {
                 val user = readUser()
                 deleteUser().store()
                 println("user ${user.name} has been deleted.")
-            } catch (e: IllegalStateException) {
+            } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
                 printHelpMessage()
             }

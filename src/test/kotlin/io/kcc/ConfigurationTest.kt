@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.io.File
+import java.net.MalformedURLException
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -63,7 +64,7 @@ internal class ConfigurationTest {
     fun readUserWithException() {
         val configMap = mapOf(userTopics to "kotlin, java")
         val configuration = Configuration()
-        assertThrows(IllegalStateException::class.java) { configuration.readUser(configMap) }
+        assertThrows(IllegalArgumentException::class.java) { configuration.readUser(configMap) }
     }
 
     @Test
@@ -76,7 +77,7 @@ internal class ConfigurationTest {
     fun createUserWithException() {
         val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
         val configuration = Configuration()
-        assertThrows(IllegalStateException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             configuration.createUser("enrico", configMap)
         }
     }
@@ -106,7 +107,7 @@ internal class ConfigurationTest {
     @Test
     fun updateUserWithException() {
         val configuration = Configuration()
-        assertThrows(IllegalStateException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             configuration.updateUser(
                 User(
                     User.Name("enrico"),
@@ -139,7 +140,7 @@ internal class ConfigurationTest {
     @Test
     fun deleteUserWithException() {
         val configuration = Configuration()
-        assertThrows(IllegalStateException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             configuration.deleteUser()
         }
     }
@@ -156,20 +157,20 @@ internal class ConfigurationTest {
 
     @Test
     fun registerHost() {
-        val config = Configuration().registerHost("file:///users/enrico/kcc-server")
-        assertEquals("file:/users/enrico/kcc-server", config.configView[hostUrl])
+        val config = Configuration().registerHost("file:///")
+        assertEquals("file:/", config.configView[hostUrl])
     }
 
     @Test
     fun registerHostWithoutScheme() {
-        val config = Configuration().registerHost("/users/enrico/kcc-server")
-        assertEquals("file:/users/enrico/kcc-server", config.configView[hostUrl])
+        val config = Configuration().registerHost("./")
+        assertEquals("file:./", config.configView[hostUrl])
     }
 
     @Test
     fun registerHostWithExceptionByBadScheme() {
         val configuration = Configuration()
-        assertThrows(Exception::class.java) {
+        assertThrows(MalformedURLException::class.java) {
             configuration.registerHost("unknown:/path")
         }
     }
@@ -177,7 +178,7 @@ internal class ConfigurationTest {
     @Test
     fun registerHostWithExceptionByUnsupportedScheme() {
         val configuration = Configuration()
-        assertThrows(Exception::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             configuration.registerHost("ftp:/path")
         }
     }

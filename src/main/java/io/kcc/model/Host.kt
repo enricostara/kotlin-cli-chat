@@ -23,7 +23,6 @@ class Host(initUrl: String) {
           path: ${url.path}
     """.trimIndent()
 
-
     // Since this is a standard class the equals()/hashCode() pair has been manually overridden
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -34,4 +33,3 @@ class Host(initUrl: String) {
 
     override fun hashCode() = url.hashCode()
 }
-

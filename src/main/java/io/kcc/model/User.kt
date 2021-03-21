@@ -14,12 +14,14 @@ data class User(
 ) {
 
     fun joinTopic(topic: Topic) {
-        if (topics.contains(topic)) error("topic $topic already joined!")
+        require(!topics.contains(topic)) { "topic $topic already joined!" }
         topics.add(topic)
     }
 
+    fun joinedTopic(topic: Topic): Boolean = topics.contains(topic)
+
     fun leaveTopic(topic: Topic) {
-        if (!topics.contains(topic)) error("cannot leave the topic $topic, it has not been joined!")
+        require(topics.contains(topic)) { "cannot leave the topic $topic, it has not been joined!" }
         topics.remove(topic)
     }
 

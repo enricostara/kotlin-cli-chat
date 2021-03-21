@@ -15,7 +15,7 @@ internal class UserTest {
     @Test
     fun joinTopicWithExceptionByAlreadyJoined() {
         val user = User(User.Name("enrico"), arrayListOf(Topic("java")))
-        Assertions.assertThrows(Exception::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             user.joinTopic(Topic("java"))
         }
     }

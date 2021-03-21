@@ -57,8 +57,8 @@ class Configuration(val path: String = System.getProperty(userHome)) {
      * The standard use of the method with no arguments and to support unit tests in isolation by receiving a test configuration map.
      */
     fun readUser(config: Map<String, String> = configMap): User {
-        // 'checkNotNull' throws an IllegalStateException if the value is null. Otherwise returns the not null value.
-        val username = checkNotNull(config[userName]) { userNotFound }
+        // 'requireNotNull' throws an IllegalArgumentException with the result of calling lambda if the value is null.
+        val username = requireNotNull(config[userName]) { userNotFound }
         val topicsProp = config[userTopics]
         // 'when' is an expression and it is an advanced form of the Java 'switch-case' statement.
         // it can be used without argument, then the case expressions should evaluate as either true or false.
@@ -74,14 +74,16 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     }
 
     fun createUser(name: String, config: HashMap<String, String> = configMap): Configuration {
-        check(config[userName].isNullOrEmpty()) { userAlreadyExists }
+        // 'require' throws an IllegalArgumentException with the result of calling lambda if the condition is false.
+        require(config[userName].isNullOrEmpty()) { userAlreadyExists }
         config[userName] = User.Name(name).value
         config[userTopics] = ""
         return this
     }
 
     fun updateUser(user: User, config: HashMap<String, String> = configMap): Configuration {
-        checkNotNull(config[userName]) { userNotFound }
+        // 'requireNotNull' throws an IllegalArgumentException with the result of calling lambda if the value is null.
+        requireNotNull(config[userName]) { userNotFound }
         config[userName] = user.name.value
         // 'joinToString' creates a string from all the elements separated using separator (',' as default)
         // and optionally accepts a lambda to map each element
@@ -90,7 +92,8 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     }
 
     fun deleteUser(config: HashMap<String, String> = configMap): Configuration {
-        checkNotNull(config[userName]) { userNotFound }
+        // 'requireNotNull' throws an IllegalArgumentException with the result of calling lambda if the value is null.
+        requireNotNull(config[userName]) { userNotFound }
         config.remove(userName)
         config.remove(userTopics)
         return this
@@ -104,7 +107,8 @@ class Configuration(val path: String = System.getProperty(userHome)) {
 
 
     fun readHost(config: Map<String, String> = configMap): Host {
-        val hostUrl = checkNotNull(config[hostUrl]) { hostNotRegistered }
+        // 'requireNotNull' throws an IllegalArgumentException with the result of calling lambda if the value is null.
+        val hostUrl = requireNotNull(config[hostUrl]) { hostNotRegistered }
         return Host(hostUrl)
     }
 
@@ -116,7 +120,8 @@ class Configuration(val path: String = System.getProperty(userHome)) {
     }
 
     fun unregisterHost(config: HashMap<String, String> = configMap): Configuration {
-        checkNotNull(config[hostUrl]) { hostNotRegistered }
+        // 'requireNotNull' throws an IllegalArgumentException with the result of calling lambda if the value is null.
+        requireNotNull(config[hostUrl]) { hostNotRegistered }
         config.remove(hostUrl)
         return this
     }

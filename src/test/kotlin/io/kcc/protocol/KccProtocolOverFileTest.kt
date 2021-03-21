@@ -23,6 +23,13 @@ internal class KccProtocolOverFileTest {
     }
 
     @Test
+    fun acceptWithException() {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            KccProtocolOverFile.accept(Host("file:./%&#wrong"))
+        }
+    }
+
+    @Test
     fun readTopics() {
         KccProtocolOverFile.accept(Host("file:./"))
         File(".kotlin#enrico.kcc").createNewFile()
@@ -51,7 +58,7 @@ internal class KccProtocolOverFileTest {
     fun createTopicWithExceptionByTopicAlreadyExists() {
         KccProtocolOverFile.accept(Host("file:./"))
         KccProtocolOverFile.createTopic(Topic("kotlin-cli-chat", User(User.Name("enrico"))))
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             KccProtocolOverFile.createTopic(Topic("kotlin-cli-chat", User(User.Name("other"))))
         }
     }
@@ -75,7 +82,7 @@ internal class KccProtocolOverFileTest {
     @Test
     fun joinTopicWithExceptionByTopicDoesNotExist() {
         KccProtocolOverFile.accept(Host("file:./"))
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             KccProtocolOverFile.joinTopic("kotlin")
         }
     }
@@ -83,7 +90,7 @@ internal class KccProtocolOverFileTest {
     @Test
     fun leaveTopicWithExceptionByTopicDoesNotExist() {
         KccProtocolOverFile.accept(Host("file:./"))
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             KccProtocolOverFile.leaveTopic("kotlin")
         }
     }
@@ -102,7 +109,7 @@ internal class KccProtocolOverFileTest {
     @Test
     fun deleteTopicWithExceptionByTopicDoesNotExist() {
         KccProtocolOverFile.accept(Host("file:./"))
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             KccProtocolOverFile.deleteTopic(Topic("kotlin", User(User.Name("enrico"))))
         }
     }
@@ -111,7 +118,7 @@ internal class KccProtocolOverFileTest {
     fun deleteTopicWithExceptionByNotOwner() {
         KccProtocolOverFile.accept(Host("file:./"))
         File(".kotlin#enrico.kcc").createNewFile()
-        Assertions.assertThrows(IllegalStateException::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             KccProtocolOverFile.deleteTopic(Topic("kotlin", User(User.Name("other"))))
         }
     }

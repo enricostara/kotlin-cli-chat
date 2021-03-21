@@ -56,7 +56,7 @@ object TopicMenu {
                         }
                     }
                 }""".trimMargin())
-            } catch (e: IllegalStateException) {
+            } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
                 printHelpMessage()
             }
@@ -76,7 +76,7 @@ object TopicMenu {
                 val topic = Topic(name, user)
                 protocol.createTopic(topic)
                 println("topic $topic has been created.")
-            } catch (e: Exception) {
+            } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
                 printHelpMessage()
             }
@@ -99,7 +99,7 @@ object TopicMenu {
                 user.joinTopic(topic)
                 updateUser(user).store()
                 println("topic $topic has been joined.")
-            } catch (e: Exception) {
+            } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
                 printHelpMessage()
             }
@@ -123,7 +123,7 @@ object TopicMenu {
                 user.leaveTopic(topic)
                 updateUser(user)
                 println("topic $topic has been left.")
-            } catch (e: Exception) {
+            } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
                 printHelpMessage()
             } finally {
@@ -146,10 +146,10 @@ object TopicMenu {
                 updateUser(user)
                 val topic = Topic(name, user)
                 protocol.deleteTopic(topic)
-                user.leaveTopic(topic)
+                if (user.joinedTopic(topic)) user.leaveTopic(topic)
                 updateUser(user)
                 println("topic $topic has been deleted.")
-            } catch (e: Exception) {
+            } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
                 printHelpMessage()
             } finally {

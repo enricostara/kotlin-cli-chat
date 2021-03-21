@@ -38,7 +38,7 @@ object MessageMenu {
                         else -> messages.joinToString("\n")
                     }
                 )
-            } catch (e: Exception) {
+            } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
                 MainMenu.printHelpMessage()
             }
@@ -55,7 +55,7 @@ object MessageMenu {
                 protocol.sendMessage(msg)
                 val messages = protocol.readMessages(topic, 3)
                 println(messages.joinToString("\n"))
-            } catch (e: Exception) {
+            } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
                 MainMenu.printHelpMessage()
             }
