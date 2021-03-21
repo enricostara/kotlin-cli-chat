@@ -1,12 +1,15 @@
 package io.kcc.protocol
 
-import io.kcc.model.Host
-import io.kcc.model.Message
-import io.kcc.model.Topic
-import io.kcc.model.userSymbol
+import io.kcc.model.*
 import java.io.File
+import java.nio.ByteBuffer
+import java.nio.channels.FileChannel
+import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 
 object KccProtocolOverFile : KccProtocol {
+
+    const val messageDelimiter: Char = '|'
 
     lateinit var host: Host
 
@@ -25,8 +28,20 @@ object KccProtocolOverFile : KccProtocol {
     override fun readTopics(): Set<Topic> =
         File(host.url.path).walk()
             .filter { it.extension == "kcc" }
-            .map { Topic(it.name.substringAfter('.').substringBefore(userSymbol)) }
+            .map {
+                Topic(
+                    it.name.substringAfter('.').substringBefore(userSymbol),
+                    User(User.Name(it.name.substringAfter(userSymbol).substringBeforeLast('.')))
+                )
+            }
             .toSet()
+
+    internal fun readTopic(topicName: String): Topic {
+        val topic = Topic(topicName)
+        val topics = readTopics().toMutableList()
+        if (!topics.contains(topic)) error("cannot read topic $topic', it doesn't exist!")
+        return topics.apply { retainAll(listOf(topic)) }.first()
+    }
 
     /**
      * The topic.owner could be null, then the safe call operator ?. has been used to get the owner's name
@@ -39,30 +54,45 @@ object KccProtocolOverFile : KccProtocol {
         File(retrieveTopicFilePath(topic)).createNewFile()
     }
 
-    override fun joinTopic(topic: Topic) {
-        val topics = readTopics()
-        if (!topics.contains(topic)) error("cannot join topic $topic, doesn't even exist!")
+    override fun joinTopic(topicName: String) {
+        readTopic(topicName)
     }
 
-    override fun leaveTopic(topic: Topic) {
-        val topics = readTopics()
-        if (!topics.contains(topic)) error("cannot leave topic $topic, doesn't even exist!")
+    override fun leaveTopic(topicName: String) {
+        readTopic(topicName)
     }
 
     override fun deleteTopic(topic: Topic) {
         val topics = readTopics()
-        if (!topics.contains(topic)) error("cannot delete topic $topic, doesn't even exist!")
+        if (!topics.contains(topic)) error("cannot delete topic $topic, it doesn't even exist!")
         val file = File(retrieveTopicFilePath(topic))
         if (!file.exists()) error("user ${topic.owner?.name} cannot delete topic $topic")
         file.delete()
     }
 
-    override fun readMessages(topic: Topic, numOfMessage: Int): List<Message> {
-        TODO("Not yet implemented")
+    override fun readMessages(topicName: String, takeLast: Int): List<Message> {
+        val topic = readTopic(topicName)
+        val topicFile = File(retrieveTopicFilePath(topic))
+        val messages = topicFile.readLines().map {
+            Message(topic, it.substringBefore(messageDelimiter), it.substringAfter(messageDelimiter))
+        }
+        val takeLastRows = if (takeLast == 0) messages.size else takeLast
+        // 'takeLast' returns a list containing last [n] elements.
+        return messages.takeLast(takeLastRows)
     }
 
-    override fun writeMessage(message: Message) {
-        TODO("Not yet implemented")
+    override fun sendMessage(message: Message) {
+        val buffer = ByteBuffer.wrap("${message.userName}$messageDelimiter${message.content}\n".toByteArray())
+        val topic = readTopic(message.topic.name)
+        val path = Paths.get(retrieveTopicFilePath(topic))
+        val channel = FileChannel.open(path, StandardOpenOption.WRITE, StandardOpenOption.APPEND)
+        // acquire an exclusive lock over the file associated with the given channel
+        channel.lock()
+        // set position at the end of file
+        channel.position(channel.size())
+        channel.write(buffer)
+        // close the channel releasing the lock
+        channel.close()
     }
 
     private fun retrieveTopicFilePath(topic: Topic) =

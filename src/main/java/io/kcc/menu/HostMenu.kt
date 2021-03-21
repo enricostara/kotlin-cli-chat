@@ -42,7 +42,7 @@ object HostMenu {
             println("host ${host.url} has been registered.")
         } catch (e: Exception) {
             println("$errorMessage${e.message}\n")
-            UserMenu.printHelpMessage()
+            printHelpMessage()
         }
     }
 

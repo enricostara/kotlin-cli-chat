@@ -6,6 +6,6 @@ package io.kcc.model
  * declared in the primary constructor.
  * [see](https://kotlinlang.org/docs/data-classes.html)
  */
-data class Message(val user: User, val topic: Topic, val content: String) {
-    override fun toString(): String = "$topic $user > $content"
+data class Message(val topic: Topic, val userName: String, val content: String) {
+    override fun toString(): String = "$topic $userName > $content"
 }

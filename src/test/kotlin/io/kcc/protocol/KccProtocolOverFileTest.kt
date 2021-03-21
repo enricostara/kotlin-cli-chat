@@ -5,6 +5,7 @@ import io.kcc.model.Topic
 import io.kcc.model.User
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.File
 
@@ -28,6 +29,15 @@ internal class KccProtocolOverFileTest {
         File(".java#enrico.kcc").createNewFile()
         val topics = KccProtocolOverFile.readTopics()
         assert(setOf(Topic("java"), Topic("kotlin")).containsAll(topics))
+        assertEquals("#enrico", topics.first().owner?.name.toString())
+    }
+
+    @Test
+    fun readTopic() {
+        KccProtocolOverFile.accept(Host("file:./"))
+        File(".kotlin#enrico.kcc").createNewFile()
+        val topic = KccProtocolOverFile.readTopic("kotlin")
+        assertEquals(User(User.Name("enrico")), topic.owner)
     }
 
     @Test
@@ -66,7 +76,7 @@ internal class KccProtocolOverFileTest {
     fun joinTopicWithExceptionByTopicDoesNotExist() {
         KccProtocolOverFile.accept(Host("file:./"))
         Assertions.assertThrows(IllegalStateException::class.java) {
-            KccProtocolOverFile.joinTopic(Topic("kotlin", User(User.Name("enrico"))))
+            KccProtocolOverFile.joinTopic("kotlin")
         }
     }
 
@@ -74,7 +84,7 @@ internal class KccProtocolOverFileTest {
     fun leaveTopicWithExceptionByTopicDoesNotExist() {
         KccProtocolOverFile.accept(Host("file:./"))
         Assertions.assertThrows(IllegalStateException::class.java) {
-            KccProtocolOverFile.leaveTopic(Topic("kotlin", User(User.Name("enrico"))))
+            KccProtocolOverFile.leaveTopic("kotlin")
         }
     }
 
