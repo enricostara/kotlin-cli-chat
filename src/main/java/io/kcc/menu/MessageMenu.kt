@@ -43,7 +43,6 @@ object MessageMenu {
                 )
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
-                MainMenu.printHelpMessage()
             }
         }
     }
@@ -62,7 +61,6 @@ object MessageMenu {
                 println(messages.joinToString("\n"))
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
-                MainMenu.printHelpMessage()
             }
         }
     }

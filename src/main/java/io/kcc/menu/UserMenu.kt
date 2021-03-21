@@ -36,7 +36,6 @@ object UserMenu {
             println(user)
         } catch (e: IllegalArgumentException) {
             println("$errorMessage${e.message}\n")
-            printHelpMessage()
         }
     }
 
@@ -46,7 +45,6 @@ object UserMenu {
             println("user ${user.name} has been created.")
         } catch (e: IllegalArgumentException) {
             println("$errorMessage${e.message}\n")
-            printHelpMessage()
         }
     }
 
@@ -65,7 +63,6 @@ object UserMenu {
                 println("user $oldName is now known as ${user.name}")
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
-                printHelpMessage()
             }
         }
     }
@@ -83,7 +80,6 @@ object UserMenu {
                 println("user ${user.name} has been deleted.")
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
-                printHelpMessage()
             }
         }
     }

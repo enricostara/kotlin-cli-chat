@@ -58,7 +58,6 @@ object TopicMenu {
                 }""".trimMargin())
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
-                printHelpMessage()
             }
         }
     }
@@ -78,7 +77,6 @@ object TopicMenu {
                 println("topic $topic has been created.")
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
-                printHelpMessage()
             }
         }
     }
@@ -101,7 +99,6 @@ object TopicMenu {
                 println("topic $topic has been joined.")
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
-                printHelpMessage()
             }
         }
     }
@@ -125,7 +122,6 @@ object TopicMenu {
                 println("topic $topic has been left.")
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
-                printHelpMessage()
             } finally {
                 store()
             }
@@ -151,7 +147,6 @@ object TopicMenu {
                 println("topic $topic has been deleted.")
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
-                printHelpMessage()
             } finally {
                 store()
             }

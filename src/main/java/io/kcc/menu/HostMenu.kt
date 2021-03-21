@@ -32,7 +32,6 @@ object HostMenu {
             println(host)
         } catch (e: IllegalArgumentException) {
             println("$errorMessage${e.message}\n")
-            printHelpMessage()
         }
     }
 
@@ -42,7 +41,6 @@ object HostMenu {
             println("host ${host.url} has been registered.")
         } catch (e: Exception) {
             println("$errorMessage${e.message}\n")
-            printHelpMessage()
         }
     }
 
@@ -59,7 +57,6 @@ object HostMenu {
                 println("host ${host.url} has been unregistered.")
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
-                UserMenu.printHelpMessage()
             }
         }
     }
