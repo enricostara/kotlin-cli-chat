@@ -26,7 +26,7 @@ object MessageMenu {
         else -> { -> readMessages(args[0].drop(1)) }
     }
 
-    internal fun readMessages(topicName: String) {
+    internal fun readMessages(topicName: String, takeLast: Int = 10) {
         Configuration().apply {
             try {
                 load()
@@ -34,7 +34,7 @@ object MessageMenu {
                 val topic = Topic(topicName)
                 require(user.joinedTopic(topic)) { "user ${user.name} has to join the topic $topic before reading messages!" }
                 val protocol = provideKccProtocolHandler(readHost())
-                val messages = protocol.readMessages(topicName)
+                val messages = protocol.readMessages(topicName, takeLast)
                 println(
                     when {
                         messages.isEmpty() -> "$topicName: no messages"

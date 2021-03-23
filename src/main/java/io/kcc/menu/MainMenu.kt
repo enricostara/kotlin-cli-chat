@@ -1,6 +1,6 @@
 package io.kcc.menu
 
-import io.kcc.model.topicSymbol
+import io.kcc.model.topicSeparator
 import io.kcc.projectVersion
 
 const val userMenuItem = "user"
@@ -41,7 +41,7 @@ object MainMenu {
             hostMenuItem -> HostMenu.translateUserInput(*(args.drop(1).toTypedArray()))
             topicMenuItem -> TopicMenu.translateUserInput(*(args.drop(1).toTypedArray()))
             // if-else is an expression and it is much more readable than the Java ternary operator
-            else -> if (args[0].startsWith(topicSymbol)) MessageMenu.translateUserInput(*args) else MainMenu::printHelpMessage
+            else -> if (args[0].startsWith(topicSeparator)) MessageMenu.translateUserInput(*args) else MainMenu::printHelpMessage
         }
     }
 
@@ -58,8 +58,11 @@ object MainMenu {
             kcc $userMenuItem
             kcc $hostMenuItem
             kcc $topicMenuItem
-            kcc <${topicSymbol}topic> <msg>
-            kcc <${topicSymbol}topic>
+            kcc <${topicSeparator}topic> <msg>
+            kcc <${topicSeparator}topic>
+            kcc <${topicSeparator}topic${topicSeparator}#>
+            kcc <${topicSeparator}topic${topicSeparator}user>
+            kcc <${topicSeparator}topic${topicSeparator}user${topicSeparator}#>
             kcc $helpShortOption | $helpOption
             kcc $versionOption
             

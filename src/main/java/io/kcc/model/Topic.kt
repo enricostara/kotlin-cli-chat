@@ -1,6 +1,6 @@
 package io.kcc.model
 
-const val topicSymbol = '/'
+const val topicSeparator = '/'
 
 /**
  *  Use a standard class in order to validate constructor parameters
@@ -20,7 +20,7 @@ class Topic(initName: String, val owner: User? = null) {
         )
     }
 
-    override fun toString() = "$topicSymbol$name"
+    override fun toString() = "$topicSeparator$name"
 
     // Since this is a standard class the equals()/hashCode() pair has been manually overridden
     override fun equals(other: Any?): Boolean {

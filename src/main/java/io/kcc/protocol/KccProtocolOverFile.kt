@@ -1,6 +1,9 @@
 package io.kcc.protocol
 
-import io.kcc.model.*
+import io.kcc.model.Host
+import io.kcc.model.Message
+import io.kcc.model.Topic
+import io.kcc.model.User
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
@@ -9,8 +12,8 @@ import java.nio.file.StandardOpenOption
 
 object KccProtocolOverFile : KccProtocol {
 
-    const val messageDelimiter: Char = '|'
-    const val userDelimiter: Char = '~'
+    const val messageSeparator: Char = '|'
+    const val userSeparator: Char = '~'
 
     lateinit var host: Host
 
@@ -32,8 +35,8 @@ object KccProtocolOverFile : KccProtocol {
             .filter { it.extension == "kcc" }
             .map {
                 Topic(
-                    it.name.substringAfter('.').substringBefore(userDelimiter),
-                    User(User.Name(it.name.substringAfter(userDelimiter).substringBeforeLast('.')))
+                    it.name.substringAfter('.').substringBefore(userSeparator),
+                    User(User.Name(it.name.substringAfter(userSeparator).substringBeforeLast('.')))
                 )
             }
             .toSet()
@@ -78,7 +81,7 @@ object KccProtocolOverFile : KccProtocol {
         val topic = readTopic(topicName)
         val topicFile = File(retrieveTopicFilePath(topic))
         val messages = topicFile.readLines().map {
-            Message(topic, it.substringBefore(messageDelimiter), it.substringAfter(messageDelimiter))
+            Message(topic, it.substringBefore(messageSeparator), it.substringAfter(messageSeparator))
         }
         val takeLastRows = if (takeLast == 0) messages.size else takeLast
         // 'takeLast' returns a list containing last [n] elements.
@@ -86,7 +89,7 @@ object KccProtocolOverFile : KccProtocol {
     }
 
     override fun sendMessage(message: Message) {
-        val buffer = ByteBuffer.wrap("${message.userName}$messageDelimiter${message.content}\n".toByteArray())
+        val buffer = ByteBuffer.wrap("${message.userName}$messageSeparator${message.content}\n".toByteArray())
         val topic = readTopic(message.topic.name)
         val path = Paths.get(retrieveTopicFilePath(topic))
         val channel = FileChannel.open(path, StandardOpenOption.WRITE, StandardOpenOption.APPEND)
@@ -100,5 +103,5 @@ object KccProtocolOverFile : KccProtocol {
     }
 
     private fun retrieveTopicFilePath(topic: Topic) =
-        "${host.url.path}${File.separator}.${topic.name}$userDelimiter${topic.owner?.name?.value}.kcc"
+        "${host.url.path}${File.separator}.${topic.name}$userSeparator${topic.owner?.name?.value}.kcc"
 }

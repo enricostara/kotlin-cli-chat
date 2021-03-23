@@ -75,6 +75,7 @@ object TopicMenu {
                 val topic = Topic(name, user)
                 protocol.createTopic(topic)
                 println("topic $topic has been created.")
+                joinTopic(name)
             } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
             }
