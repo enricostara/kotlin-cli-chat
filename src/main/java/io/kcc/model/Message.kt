@@ -7,5 +7,5 @@ package io.kcc.model
  * [see](https://kotlinlang.org/docs/data-classes.html)
  */
 data class Message(val topic: Topic, val userName: String, val content: String) {
-    override fun toString(): String = "$topic $userName > $content"
+    override fun toString(): String = "$topic/$userName > $content"
 }

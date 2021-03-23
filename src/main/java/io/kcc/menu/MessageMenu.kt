@@ -55,7 +55,7 @@ object MessageMenu {
                 val topic = Topic(topicName)
                 require(user.joinedTopic(topic)) { "user ${user.name} has to join the topic $topic before sending a message!" }
                 val protocol = provideKccProtocolHandler(readHost())
-                val msg = Message(topic, user.name.toString(), words.joinToString(" "))
+                val msg = Message(topic, user.name.value, words.joinToString(" "))
                 protocol.sendMessage(msg)
                 val messages = protocol.readMessages(topicName, 3)
                 println(messages.joinToString("\n"))

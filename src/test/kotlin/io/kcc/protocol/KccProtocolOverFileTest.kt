@@ -32,17 +32,17 @@ internal class KccProtocolOverFileTest {
     @Test
     fun readTopics() {
         KccProtocolOverFile.accept(Host("file:./"))
-        File(".kotlin#enrico.kcc").createNewFile()
-        File(".java#enrico.kcc").createNewFile()
+        File(".kotlin~enrico.kcc").createNewFile()
+        File(".java~enrico.kcc").createNewFile()
         val topics = KccProtocolOverFile.readTopics()
         assert(setOf(Topic("java"), Topic("kotlin")).containsAll(topics))
-        assertEquals("#enrico", topics.first().owner?.name.toString())
+        assertEquals("'enrico'", topics.first().owner?.name.toString())
     }
 
     @Test
     fun readTopic() {
         KccProtocolOverFile.accept(Host("file:./"))
-        File(".kotlin#enrico.kcc").createNewFile()
+        File(".kotlin~enrico.kcc").createNewFile()
         val topic = KccProtocolOverFile.readTopic("kotlin")
         assertEquals(User(User.Name("enrico")), topic.owner)
     }
@@ -51,7 +51,7 @@ internal class KccProtocolOverFileTest {
     fun createTopic() {
         KccProtocolOverFile.accept(Host("file:./"))
         KccProtocolOverFile.createTopic(Topic("kotlin-cli-chat", User(User.Name("enrico"))))
-        assert(File(".kotlin-cli-chat#enrico.kcc").exists())
+        assert(File(".kotlin-cli-chat~enrico.kcc").exists())
     }
 
     @Test
@@ -98,9 +98,9 @@ internal class KccProtocolOverFileTest {
     @Test
     fun deleteTopic() {
         KccProtocolOverFile.accept(Host("file:./"))
-        File(".kotlin#enrico.kcc").createNewFile()
-        File(".java#enrico.kcc").createNewFile()
-        File(".pascal#enrico.kcc").createNewFile()
+        File(".kotlin~enrico.kcc").createNewFile()
+        File(".java~enrico.kcc").createNewFile()
+        File(".pascal~enrico.kcc").createNewFile()
         KccProtocolOverFile.deleteTopic(Topic("pascal", User(User.Name("enrico"))))
         val topics = KccProtocolOverFile.readTopics()
         assert(setOf(Topic("java"), Topic("kotlin")).containsAll(topics))
@@ -117,7 +117,7 @@ internal class KccProtocolOverFileTest {
     @Test
     fun deleteTopicWithExceptionByNotOwner() {
         KccProtocolOverFile.accept(Host("file:./"))
-        File(".kotlin#enrico.kcc").createNewFile()
+        File(".kotlin~enrico.kcc").createNewFile()
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             KccProtocolOverFile.deleteTopic(Topic("kotlin", User(User.Name("other"))))
         }

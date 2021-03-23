@@ -10,6 +10,7 @@ import java.nio.file.StandardOpenOption
 object KccProtocolOverFile : KccProtocol {
 
     const val messageDelimiter: Char = '|'
+    const val userDelimiter: Char = '~'
 
     lateinit var host: Host
 
@@ -31,8 +32,8 @@ object KccProtocolOverFile : KccProtocol {
             .filter { it.extension == "kcc" }
             .map {
                 Topic(
-                    it.name.substringAfter('.').substringBefore(userSymbol),
-                    User(User.Name(it.name.substringAfter(userSymbol).substringBeforeLast('.')))
+                    it.name.substringAfter('.').substringBefore(userDelimiter),
+                    User(User.Name(it.name.substringAfter(userDelimiter).substringBeforeLast('.')))
                 )
             }
             .toSet()
@@ -99,5 +100,5 @@ object KccProtocolOverFile : KccProtocol {
     }
 
     private fun retrieveTopicFilePath(topic: Topic) =
-        "${host.url.path}${File.separator}.${topic.name}${topic.owner?.name}.kcc"
+        "${host.url.path}${File.separator}.${topic.name}$userDelimiter${topic.owner?.name?.value}.kcc"
 }

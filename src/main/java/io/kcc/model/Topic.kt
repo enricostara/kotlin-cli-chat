@@ -14,9 +14,9 @@ class Topic(initName: String, val owner: User? = null) {
     val name = validate(initName)
 
     private fun validate(value: String) = when {
-        value.matches("^[a-zA-Z0-9-]{3,24}$".toRegex()) -> value
+        value.matches("^[a-z][a-z0-9-]{2,23}$".toRegex()) -> value
         else -> throw IllegalArgumentException(
-            "topic name '$value' is not valid! It can only contain letters, numbers, hyphen and be between 3 and 24 characters long"
+            "topic name '$value' is not valid! It can only contain lowercase letters, numbers, hyphens, start with a letter and be 3-24 characters in length"
         )
     }
 

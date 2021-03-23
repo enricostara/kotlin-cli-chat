@@ -1,7 +1,5 @@
 package io.kcc.model
 
-const val userSymbol = '#'
-
 /**
  * The main purpose of 'data class' is to hold data.
  * The compiler automatically derives equals(), hashCode(), toString() members from all properties
@@ -60,13 +58,13 @@ data class User(
             }
 
         private fun validate(value: String) = when {
-            value.matches("^[a-zA-Z0-9_]{3,12}$".toRegex()) -> value
+            value.matches("^[a-z][a-z0-9-]{2,11}$".toRegex()) -> value
             else -> throw IllegalArgumentException(
-                "user name '$value' is not valid! It can only contain letters, numbers, underscores and be between 3 and 12 characters long"
+                "user name '$value' is not valid! It can only contain lowercase letters, numbers, hyphens, start with a letter and be 3-12 characters in length"
             )
         }
 
-        override fun toString() = "$userSymbol$value"
+        override fun toString() = "'$value'"
 
         // Since this is a standard class the equals()/hashCode() pair has been manually overridden
         override fun equals(other: Any?): Boolean {

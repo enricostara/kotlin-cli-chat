@@ -6,6 +6,41 @@ import org.junit.jupiter.api.Test
 internal class UserTest {
 
     @Test
+    fun createUserWithExceptionByWrongName1() {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            User(User.Name("Enrico"))
+        }
+    }
+
+    @Test
+    fun createUserWithExceptionByWrongName2() {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            User(User.Name("1enrico"))
+        }
+    }
+
+    @Test
+    fun createUserWithExceptionByWrongName3() {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            User(User.Name("en"))
+        }
+    }
+
+    @Test
+    fun createUserWithExceptionByWrongName4() {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            User(User.Name("enrico_"))
+        }
+    }
+
+    @Test
+    fun createUserWithExceptionByWrongName5() {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            User(User.Name("e123456789012"))
+        }
+    }
+
+    @Test
     fun joinTopic() {
         val user = User(User.Name("enrico"), arrayListOf(Topic("java")))
         user.joinTopic(Topic("kotlin"))
@@ -30,7 +65,7 @@ internal class UserTest {
     @Test
     fun leaveTopicWithExceptionByNotYetBeenJoined() {
         val user = User(User.Name("enrico"), arrayListOf(Topic("java")))
-        Assertions.assertThrows(Exception::class.java) {
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
             user.leaveTopic(Topic("kotlin"))
         }
     }
