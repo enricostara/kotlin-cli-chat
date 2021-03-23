@@ -150,4 +150,55 @@ internal class KccProtocolOverFileTest {
         val message = file.readLines()[0]
         assertEquals("enrico${messageSeparator}Hello world!", message)
     }
+
+    @Test
+    fun tailMessages() {
+        KccProtocolOverFile.accept(Host("file:./"))
+        val file = File(".kotlin${userSeparator}enrico.kcc")
+        file.createNewFile()
+        for (i in 1..10) {
+            file.appendText("enrico${messageSeparator}Hello world! ${i}\n")
+        }
+        val messages = KccProtocolOverFile.readMessages("kotlin", 5)
+        assertEquals(5, messages.size)
+    }
+
+    @Test
+    fun filterMessages() {
+        KccProtocolOverFile.accept(Host("file:./"))
+        val file = File(".kotlin${userSeparator}enrico.kcc")
+        file.createNewFile()
+        for (i in 1..10) {
+            file.appendText("enrico${messageSeparator}Hello world! ${i}\n")
+        }
+        for (i in 1..5) {
+            file.appendText("kotlin-user${messageSeparator}Hello world! ${i}\n")
+        }
+        var messages = KccProtocolOverFile.readMessages("kotlin")
+        assertEquals(15, messages.size)
+        messages = KccProtocolOverFile.readMessages("kotlin", 0, "enrico")
+        assertEquals(10, messages.size)
+        messages = KccProtocolOverFile.readMessages("kotlin", 0, "kotlin-user")
+        assertEquals(5, messages.size)
+    }
+
+    @Test
+    fun filterAndTailMessages() {
+        KccProtocolOverFile.accept(Host("file:./"))
+        val file = File(".kotlin${userSeparator}enrico.kcc")
+        file.createNewFile()
+        for (i in 1..10) {
+            file.appendText("enrico${messageSeparator}Hello world! ${i}\n")
+        }
+        for (i in 1..5) {
+            file.appendText("kotlin-user${messageSeparator}Hello world! ${i}\n")
+        }
+        var messages = KccProtocolOverFile.readMessages("kotlin")
+        assertEquals(15, messages.size)
+        messages = KccProtocolOverFile.readMessages("kotlin", 3, "enrico")
+        assertEquals(3, messages.size)
+        messages = KccProtocolOverFile.readMessages("kotlin", 2, "kotlin-user")
+        assertEquals(2, messages.size)
+    }
+
 }

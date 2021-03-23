@@ -77,12 +77,15 @@ object KccProtocolOverFile : KccProtocol {
         file.delete()
     }
 
-    override fun readMessages(topicName: String, takeLast: Int): List<Message> {
+    override fun readMessages(topicName: String, takeLast: Int, userName: String?): List<Message> {
         val topic = readTopic(topicName)
         val topicFile = File(retrieveTopicFilePath(topic))
-        val messages = topicFile.readLines().map {
+        // 'map' returns a list containing the results of applying the given transform function to each element in the original collection.
+        var messages = topicFile.readLines().map {
             Message(topic, it.substringBefore(messageSeparator), it.substringAfter(messageSeparator))
         }
+        // 'filter' returns a list containing only elements matching the given predicate.
+        messages = if (!userName.isNullOrEmpty()) messages.filter { it.userName == userName } else messages
         val takeLastRows = if (takeLast == 0) messages.size else takeLast
         // 'takeLast' returns a list containing last [n] elements.
         return messages.takeLast(takeLastRows)
