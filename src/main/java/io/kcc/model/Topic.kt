@@ -1,6 +1,6 @@
 package io.kcc.model
 
-const val topicSymbol = '/'
+const val topicSeparator = '/'
 
 /**
  *  Use a standard class in order to validate constructor parameters
@@ -14,13 +14,13 @@ class Topic(initName: String, val owner: User? = null) {
     val name = validate(initName)
 
     private fun validate(value: String) = when {
-        value.matches("^[a-zA-Z0-9-]{3,}$".toRegex()) -> value
+        value.matches("^[a-z][a-z0-9-]{2,23}$".toRegex()) -> value
         else -> throw IllegalArgumentException(
-            "topic name '$value' is not valid! It can only contain letters, numbers, hyphen and be at least 3 characters long."
+            "topic name '$value' is not valid! It can only contain lowercase letters, numbers, hyphens, start with a letter and be 3-24 characters in length"
         )
     }
 
-    override fun toString() = "$topicSymbol$name"
+    override fun toString() = "$topicSeparator$name"
 
     // Since this is a standard class the equals()/hashCode() pair has been manually overridden
     override fun equals(other: Any?): Boolean {

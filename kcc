@@ -1,4 +1,3 @@
 #!/usr/bin/env sh
 source ./build/resources/main/version.properties
-
 java -jar build/libs/kotlin-cli-chat-${version}.jar $@

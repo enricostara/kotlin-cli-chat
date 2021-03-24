@@ -1,7 +1,5 @@
 package io.kcc.model
 
-const val userSymbol = '#'
-
 /**
  * The main purpose of 'data class' is to hold data.
  * The compiler automatically derives equals(), hashCode(), toString() members from all properties
@@ -14,12 +12,14 @@ data class User(
 ) {
 
     fun joinTopic(topic: Topic) {
-        if (topics.contains(topic)) error("topic $topic already joined!")
+        require(!topics.contains(topic)) { "topic $topic already joined!" }
         topics.add(topic)
     }
 
+    fun joinedTopic(topic: Topic): Boolean = topics.contains(topic)
+
     fun leaveTopic(topic: Topic) {
-        if (!topics.contains(topic)) error("cannot leave the topic $topic, it has not been joined!")
+        require(topics.contains(topic)) { "cannot leave the topic $topic, it has not been joined!" }
         topics.remove(topic)
     }
 
@@ -58,13 +58,13 @@ data class User(
             }
 
         private fun validate(value: String) = when {
-            value.matches("^[a-zA-Z0-9_]{3,}$".toRegex()) -> value
+            value.matches("^[a-z][a-z0-9_]{2,11}$".toRegex()) -> value
             else -> throw IllegalArgumentException(
-                "user name '$value' is not valid! It can only contain letters, numbers, underscores and be at least 3 characters long."
+                "user name '$value' is not valid! It can only contain lowercase letters, numbers, underscores, start with a letter and be 3-12 characters in length"
             )
         }
 
-        override fun toString() = "$userSymbol$value"
+        override fun toString() = "'$value'"
 
         // Since this is a standard class the equals()/hashCode() pair has been manually overridden
         override fun equals(other: Any?): Boolean {

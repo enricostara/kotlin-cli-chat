@@ -4,6 +4,7 @@ import io.kcc.Configuration
 import io.kcc.errorMessage
 import io.kcc.model.Message
 import io.kcc.model.Topic
+import io.kcc.model.topicSeparator
 import io.kcc.protocol.provideKccProtocolHandler
 
 /**
@@ -26,39 +27,65 @@ object MessageMenu {
         else -> { -> readMessages(args[0].drop(1)) }
     }
 
-    internal fun readMessages(topic: String) {
-        Configuration().apply {
-            try {
-                load()
-                val protocol = provideKccProtocolHandler(readHost())
-                val messages = protocol.readMessages(topic)
-                println(
-                    when {
-                        messages.isEmpty() -> "$topic: no messages"
-                        else -> messages.joinToString("\n")
-                    }
-                )
-            } catch (e: Exception) {
-                println("$errorMessage${e.message}\n")
-                MainMenu.printHelpMessage()
-            }
-        }
-    }
-
-    internal fun sendMessage(topic: String, vararg words: String) {
+    internal fun readMessages(topicQuery: String, takeLast: Int = 10) {
         Configuration().apply {
             try {
                 load()
                 val user = readUser()
+                // You can destructure the class properties into variables
+                val (topicName, takeLastMessages, userName) = evaluateQuery(topicQuery, takeLast)
+                val topic = Topic(topicName)
+                require(user.joinedTopic(topic)) { "user ${user.name} has to join the topic $topic before reading messages!" }
                 val protocol = provideKccProtocolHandler(readHost())
-                val msg = Message(Topic(topic), user.name.toString(), words.joinToString(" "))
-                protocol.sendMessage(msg)
-                val messages = protocol.readMessages(topic, 3)
-                println(messages.joinToString("\n"))
-            } catch (e: Exception) {
+                val messages = protocol.readMessages(topicName, takeLastMessages, userName)
+                println(
+                    when {
+                        messages.isEmpty() -> "$topicName: no messages"
+                        else -> messages.joinToString("\n")
+                    }
+                )
+            } catch (e: IllegalArgumentException) {
                 println("$errorMessage${e.message}\n")
-                MainMenu.printHelpMessage()
             }
         }
+    }
+
+    internal fun sendMessage(topicName: String, vararg words: String) {
+        Configuration().apply {
+            try {
+                load()
+                val user = readUser()
+                val topic = Topic(topicName)
+                require(user.joinedTopic(topic)) { "user ${user.name} has to join the topic $topic before sending a message!" }
+                val protocol = provideKccProtocolHandler(readHost())
+                val msg = Message(topic, user.name.value, words.joinToString(" "))
+                protocol.sendMessage(msg)
+                val messages = protocol.readMessages(topicName, 3)
+                println(messages.joinToString("\n"))
+            } catch (e: IllegalArgumentException) {
+                println("$errorMessage${e.message}\n")
+            }
+        }
+    }
+
+    // Triple represents a triad of values
+    internal fun evaluateQuery(query: String, takeLast: Int): Triple<String, Int, String?> {
+        val queryIterator = query.splitToSequence(topicSeparator).iterator()
+        val topicName = queryIterator.next()
+        var takeLastRows = takeLast
+        var userName: String? = null
+        if (queryIterator.hasNext()) {
+            val subQuery = queryIterator.next()
+            when {
+                subQuery.matches("^[0-9]+$".toRegex()) -> takeLastRows = subQuery.toInt()
+                else -> userName = subQuery
+            }
+        }
+        if (queryIterator.hasNext() && !userName.isNullOrEmpty()) {
+            val subQuery = queryIterator.next()
+            require(subQuery.matches("^[0-9]+$".toRegex())) { "last argument of query '$topicSeparator$query' must be a number " }
+            takeLastRows = subQuery.toInt()
+        }
+        return Triple(topicName, takeLastRows, userName)
     }
 }

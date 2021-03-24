@@ -18,6 +18,7 @@ test {
 }
 
 jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes "Main-Class": "io.kcc.KotlinCliChatKt"
     }

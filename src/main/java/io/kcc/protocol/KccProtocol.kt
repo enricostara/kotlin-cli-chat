@@ -20,6 +20,6 @@ interface KccProtocol {
     fun leaveTopic(topicName: String)
     fun deleteTopic(topic: Topic)
 
-    fun readMessages(topicName: String, takeLast: Int = 0): List<Message>
+    fun readMessages(topicName: String, takeLast: Int = 0, userName: String? = null): List<Message>
     fun sendMessage(message: Message)
 }
