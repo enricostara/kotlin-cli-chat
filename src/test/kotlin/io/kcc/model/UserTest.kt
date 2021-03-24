@@ -42,14 +42,14 @@ internal class UserTest {
 
     @Test
     fun joinTopic() {
-        val user = User(User.Name("enrico"), arrayListOf(Topic("java")))
+        val user = User(User.Name("enrico"), mutableListOf(Topic("java")))
         user.joinTopic(Topic("kotlin"))
         Assertions.assertArrayEquals(arrayOf(Topic("java"), Topic("kotlin")), user.topics.toTypedArray())
     }
 
     @Test
     fun joinTopicWithExceptionByAlreadyJoined() {
-        val user = User(User.Name("enrico"), arrayListOf(Topic("java")))
+        val user = User(User.Name("enrico"), mutableListOf(Topic("java")))
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             user.joinTopic(Topic("java"))
         }
@@ -57,14 +57,14 @@ internal class UserTest {
 
     @Test
     fun leaveTopic() {
-        val user = User(User.Name("enrico"), arrayListOf(Topic("pascal"), Topic("kotlin"), Topic("java")))
+        val user = User(User.Name("enrico"), mutableListOf(Topic("pascal"), Topic("kotlin"), Topic("java")))
         user.leaveTopic(Topic("pascal"))
         Assertions.assertArrayEquals(arrayOf(Topic("kotlin"), Topic("java")), user.topics.toTypedArray())
     }
 
     @Test
     fun leaveTopicWithExceptionByNotYetBeenJoined() {
-        val user = User(User.Name("enrico"), arrayListOf(Topic("java")))
+        val user = User(User.Name("enrico"), mutableListOf(Topic("java")))
         Assertions.assertThrows(IllegalArgumentException::class.java) {
             user.leaveTopic(Topic("kotlin"))
         }
@@ -72,7 +72,7 @@ internal class UserTest {
 
     @Test
     fun validateTopics() {
-        val user = User(User.Name("enrico"), arrayListOf(Topic("pascal"), Topic("kotlin"), Topic("java")))
+        val user = User(User.Name("enrico"), mutableListOf(Topic("pascal"), Topic("kotlin"), Topic("java")))
         user.validateTopics(setOf(Topic("kotlin"), Topic("java")))
         Assertions.assertArrayEquals(arrayOf(Topic("kotlin"), Topic("java")), user.topics.toTypedArray())
     }

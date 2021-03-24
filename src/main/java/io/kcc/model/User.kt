@@ -8,24 +8,26 @@ package io.kcc.model
  */
 data class User(
     var name: Name,
-    val topics: MutableList<Topic> = arrayListOf()
+    private val currentTopics: MutableList<Topic> = mutableListOf()
 ) {
+    val topics: List<Topic>
+        get() = currentTopics.toList()
 
     fun joinTopic(topic: Topic) {
-        require(!topics.contains(topic)) { "topic $topic already joined!" }
-        topics.add(topic)
+        require(!currentTopics.contains(topic)) { "topic $topic already joined!" }
+        currentTopics.add(topic)
     }
 
-    fun joinedTopic(topic: Topic): Boolean = topics.contains(topic)
+    fun joinedTopic(topic: Topic): Boolean = currentTopics.contains(topic)
 
     fun leaveTopic(topic: Topic) {
-        require(topics.contains(topic)) { "cannot leave the topic $topic, it has not been joined!" }
-        topics.remove(topic)
+        require(currentTopics.contains(topic)) { "cannot leave the topic $topic, it has not been joined!" }
+        currentTopics.remove(topic)
     }
 
     fun validateTopics(hostTopics: Set<Topic>) {
         // Retains only the topics that are contained in the host topic collection.
-        topics.retainAll(hostTopics)
+        currentTopics.retainAll(hostTopics)
     }
 
     /**
@@ -37,8 +39,8 @@ data class User(
         |  name: $name                
         |  topics: ${
         when {
-            topics.isEmpty() -> "no /topics"
-            else -> topics.joinToString("\n|    - ", "\n|    - ", "") { it.toString() }
+            currentTopics.isEmpty() -> "no /topics"
+            else -> currentTopics.joinToString("\n|    - ", "\n|    - ", "") { it.toString() }
         }
     }""".trimMargin()
 
