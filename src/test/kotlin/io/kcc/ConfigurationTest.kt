@@ -111,7 +111,7 @@ internal class ConfigurationTest {
             configuration.updateUser(
                 User(
                     User.Name("enrico"),
-                    arrayListOf(Topic("kotlin"), Topic("java"))
+                    mutableListOf(Topic("kotlin"), Topic("java"))
                 )
             )
         }
@@ -124,7 +124,7 @@ internal class ConfigurationTest {
             configuration.updateUser(
                 User(
                     User.Name("#enrico"),
-                    arrayListOf(Topic("kotlin"), Topic("java"))
+                    mutableListOf(Topic("kotlin"), Topic("java"))
                 )
             )
         }

@@ -65,7 +65,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
         val topics: MutableList<Topic> = when {
             // 'isNullOrEmpty()' is an 'extension' method that can check if a string is null or empty
             // 'listOf()' without arguments returns an empty list.
-            topicsProp.isNullOrEmpty() -> arrayListOf()
+            topicsProp.isNullOrEmpty() -> mutableListOf()
             // '.map' accepts a lambda as an action.
             // 'it' refers to the collection item.
             else -> topicsProp.split(',').map { Topic(it.trim()) }.toMutableList()
