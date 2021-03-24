@@ -75,7 +75,7 @@ internal class ConfigurationTest {
 
     @Test
     fun createUserWithException() {
-        val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
+        val configMap = mutableMapOf(userName to "enrico", userTopics to "kotlin, java")
         val configuration = Configuration()
         assertThrows(IllegalArgumentException::class.java) {
             configuration.createUser("enrico", configMap)
@@ -98,8 +98,8 @@ internal class ConfigurationTest {
 
     @Test
     fun updateUser() {
-        val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
-        Configuration().updateUser(User(User.Name("enrico_s"), arrayListOf(Topic("kotlin-cli-chat"))), configMap)
+        val configMap = mutableMapOf(userName to "enrico", userTopics to "kotlin, java")
+        Configuration().updateUser(User(User.Name("enrico_s"), mutableListOf(Topic("kotlin-cli-chat"))), configMap)
         assertEquals("enrico_s", configMap[userName])
         assertEquals("kotlin-cli-chat", configMap[userTopics])
     }
@@ -132,7 +132,7 @@ internal class ConfigurationTest {
 
     @Test
     fun deleteUser() {
-        val configMap = hashMapOf(userName to "enrico", userTopics to "kotlin, java")
+        val configMap = mutableMapOf(userName to "enrico", userTopics to "kotlin, java")
         Configuration().deleteUser(configMap)
         assert(configMap.isEmpty())
     }
@@ -185,7 +185,7 @@ internal class ConfigurationTest {
 
     @Test
     fun unregisterHost() {
-        val configMap = hashMapOf(hostUrl to "file:/users/enrico/kcc-server")
+        val configMap = mutableMapOf(hostUrl to "file:/users/enrico/kcc-server")
         Configuration().unregisterHost(configMap)
         assert(configMap.isEmpty())
     }

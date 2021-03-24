@@ -33,10 +33,10 @@ const val hostNotRegistered = "no host has been registered yet!"
 class Configuration(val path: String = System.getProperty(userHome)) {
 
     /**
-     * A 'hashMapOf()' without arguments returns an empty HashMap.
+     * A 'mutableMapOf()' without arguments returns an empty LinkedHashMap.
      * The 'configMap' is the backing property for the 'configView' immutable map
      */
-    private val configMap = hashMapOf<String, String>()
+    private val configMap = mutableMapOf<String, String>()
     val configView: Map<String, String>
         get() = configMap.toMap()
 
@@ -73,7 +73,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
         return User(User.Name(username), topics)
     }
 
-    fun createUser(name: String, config: HashMap<String, String> = configMap): Configuration {
+    fun createUser(name: String, config: MutableMap<String, String> = configMap): Configuration {
         // 'require' throws an IllegalArgumentException with the result of calling lambda if the condition is false.
         require(config[userName].isNullOrEmpty()) { userAlreadyExists }
         config[userName] = User.Name(name).value
@@ -81,7 +81,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
         return this
     }
 
-    fun updateUser(user: User, config: HashMap<String, String> = configMap): Configuration {
+    fun updateUser(user: User, config: MutableMap<String, String> = configMap): Configuration {
         // 'requireNotNull' throws an IllegalArgumentException with the result of calling lambda if the value is null.
         requireNotNull(config[userName]) { userNotFound }
         config[userName] = user.name.value
@@ -91,7 +91,7 @@ class Configuration(val path: String = System.getProperty(userHome)) {
         return this
     }
 
-    fun deleteUser(config: HashMap<String, String> = configMap): Configuration {
+    fun deleteUser(config: MutableMap<String, String> = configMap): Configuration {
         // 'requireNotNull' throws an IllegalArgumentException with the result of calling lambda if the value is null.
         requireNotNull(config[userName]) { userNotFound }
         config.remove(userName)
@@ -112,14 +112,14 @@ class Configuration(val path: String = System.getProperty(userHome)) {
         return Host(hostUrl)
     }
 
-    fun registerHost(url: String, config: HashMap<String, String> = configMap): Configuration {
+    fun registerHost(url: String, config: MutableMap<String, String> = configMap): Configuration {
         val host = Host(url)
         provideKccProtocolHandler(host)
         config[hostUrl] = host.url.toString()
         return this
     }
 
-    fun unregisterHost(config: HashMap<String, String> = configMap): Configuration {
+    fun unregisterHost(config: MutableMap<String, String> = configMap): Configuration {
         // 'requireNotNull' throws an IllegalArgumentException with the result of calling lambda if the value is null.
         requireNotNull(config[hostUrl]) { hostNotRegistered }
         config.remove(hostUrl)
