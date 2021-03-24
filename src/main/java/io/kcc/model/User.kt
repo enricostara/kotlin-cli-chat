@@ -58,9 +58,9 @@ data class User(
             }
 
         private fun validate(value: String) = when {
-            value.matches("^[a-z][a-z0-9-]{2,11}$".toRegex()) -> value
+            value.matches("^[a-z][a-z0-9_]{2,11}$".toRegex()) -> value
             else -> throw IllegalArgumentException(
-                "user name '$value' is not valid! It can only contain lowercase letters, numbers, hyphens, start with a letter and be 3-12 characters in length"
+                "user name '$value' is not valid! It can only contain lowercase letters, numbers, underscores, start with a letter and be 3-12 characters in length"
             )
         }
 

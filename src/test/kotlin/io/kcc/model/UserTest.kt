@@ -29,7 +29,7 @@ internal class UserTest {
     @Test
     fun createUserWithExceptionByWrongName4() {
         Assertions.assertThrows(IllegalArgumentException::class.java) {
-            User(User.Name("enrico_"))
+            User(User.Name("enrico-"))
         }
     }
 
