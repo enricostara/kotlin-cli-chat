@@ -10,7 +10,7 @@ language.
 As a Java developer, I wanted to take a picture of my first impressions of using Kotlin and write this project as a
 guide/reference for myself and other developers who might find it useful.
 
-Probably the Kotlin I wrote will look still boring to the seasoned Kotlin developer. However, it could represent what a
+Probably the Kotlin I wrote will look still boring to a seasoned Kotlin developer. However, it could represent what a
 Java programmer might find interesting to use Kotlin without sacrificing code readability when used in a small or
 medium-sized team.
 
@@ -40,7 +40,7 @@ better to clone the repository or download the zip, open the project with an app
 (like IntelliJ IDEA Community), and go through the code with the natural flow of execution
 (starting point is the `io.kcc.KotlinCliChat` [here](./src/main/java/io/kcc/KotlinCliChat.kt)).
 
-Nevertheless, I put all the very basic operational details in this README to [compile and run](#how-to-run-) the
+Nevertheless, I put all the very basic operational details in this README to [compile and run](#get-started-) the
 project.
 
 ## Communication Protocol ☎️
