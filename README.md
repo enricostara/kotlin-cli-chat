@@ -97,7 +97,7 @@ Start using the chat by accessing the help of the `user` submenu:
 ./kcc user -h
 ```
 
-The user submenu help shows all the operations available to manage your account:
+The user submenu shows all the operations available to manage your account:
 
 ```
 usage:
@@ -143,7 +143,7 @@ usage:
     kcc host -h | --help
 ```
 
-Register a host using a folder of your choice as path (the default URL schema will be `file`)
+Register the host using a folder of your choice as the path (the default URL schema will be `file`)
 
 ```
 mkdir kcc-db
@@ -226,7 +226,7 @@ To read messages from a topic (the default shows the last 10 messages):
 /jvm-lovers/your_name > Hello by a new kotlin user
 ```
 
-To show a specific number of latest posts, for example only 1 (0 means all):
+To show a specific number of most recent posts, for example only 1 (0 means all):
 
 ```
 ./kcc /jvm-lovers/1
